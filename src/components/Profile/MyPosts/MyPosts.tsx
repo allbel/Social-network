@@ -12,9 +12,8 @@ function MyPosts() {
                 <button>Add post</button>
             </div>
             <div className={css.posts}>
-                <Post />
-                <Post />
-                <Post />
+                <Post message='Hi' likeCounts={25} />
+                <Post message='My first post' likeCounts={36} />
             </div>
         </div>
     );
