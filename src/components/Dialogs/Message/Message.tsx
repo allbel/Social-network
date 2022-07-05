@@ -3,6 +3,7 @@ import css from '../Dialogs.module.css';
 
 
 export type MessageType = {
+    id: number
     message: string
 }
 
