@@ -1,12 +1,19 @@
 import React from 'react';
 import MyPosts from "./MyPosts/MyPosts";
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
+import {PostType} from "./MyPosts/Post/Post";
 
-function Profile() {
+
+type ProfilePropsType = {
+    posts: Array<PostType>
+}
+
+function Profile(props: ProfilePropsType) {
+
     return (
         <div>
             <ProfileInfo />
-            <MyPosts />
+            <MyPosts posts={props.posts} />
         </div>
     );
 };
