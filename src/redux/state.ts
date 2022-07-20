@@ -1,5 +1,3 @@
-import {rerenderEntireTree} from "../render";
-
 export type MessageType = {
     id: number
     message: string
@@ -57,6 +55,14 @@ let state: StateType = {
         ],
         newMessageText: 'Flux Message'
     }
+}
+
+let rerenderEntireTree = (state: StateType) => {
+    console.log('State changed')
+}
+
+export const subsribe = (observer: (state: StateType) => void) => {
+    rerenderEntireTree = observer;
 }
 
 export const addPost = () => {
