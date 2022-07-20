@@ -24,6 +24,7 @@ export type ProfilePageType = {
 export type DialogsPageType = {
     messages: Array<MessageType>
     dialogs: Array<DialogType>
+    newMessageText: string
 }
 
 export type StateType = {
@@ -39,7 +40,7 @@ let state: StateType = {
             {id: 3, message: 'My post', likeCounts: 36},
             {id: 4, message: 'My daas', likeCounts: 36},
         ],
-        newPostText: 'Flux',
+        newPostText: 'Flux Post',
     },
     dialogsPage: {
         dialogs: [
@@ -54,11 +55,12 @@ let state: StateType = {
             {id: 2, message: 'How are you'},
             {id: 3, message: 'Yo'},
         ],
+        newMessageText: 'Flux Message'
     }
 }
 
 export const addPost = () => {
-    let newPost: PostType = {
+    const newPost: PostType = {
         id: 5,
         message: state.profilePage.newPostText,
         likeCounts: 0
@@ -70,6 +72,21 @@ export const addPost = () => {
 
 export const updateNewPostText = (newText: string) => {
     state.profilePage.newPostText = newText
+    rerenderEntireTree(state)
+}
+
+export const addMessage = () => {
+    const newMessage = {
+        id: 4,
+        message: state.dialogsPage.newMessageText,
+    }
+    state.dialogsPage.messages.push(newMessage)
+    state.dialogsPage.newMessageText = ''
+    rerenderEntireTree(state)
+}
+
+export const updateNewMessageText = (newMessge: string) => {
+    state.dialogsPage.newMessageText = newMessge
     rerenderEntireTree(state)
 }
 
