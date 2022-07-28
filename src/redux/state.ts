@@ -1,3 +1,7 @@
+import profileReducer, {ActionProfileType} from "./profile-reducer";
+import dialogsReducer, {ActionDialogsType} from "./dialogs-reducer";
+import sidebarReducer from "./sidebar-reducer";
+
 export type MessageType = {
     id: number
     message: string
@@ -28,6 +32,7 @@ export type DialogsPageType = {
 export type StateType = {
     profilePage: ProfilePageType
     dialogsPage: DialogsPageType
+    sidebar: object
 }
 
 export type StoreType = {
@@ -41,30 +46,7 @@ export type StoreType = {
     dispatch: (action: ActionType) => void
 }
 
-export type ActionType =
-    ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator> |
-    ReturnType<typeof addMessageActionCreator> | ReturnType<typeof updateNewMessageTextActionCreator>
-
-const ADD_POST = 'ADD-POST'
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT'
-const ADD_MESSAGE = 'ADD-MESSAGE'
-const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT'
-
-export const addPostActionCreator = () => {
-    return {type: ADD_POST} as const
-}
-
-export const updateNewPostTextActionCreator = (text: string) => {
-    return {type: UPDATE_NEW_POST_TEXT, newText: text} as const
-}
-
-export const addMessageActionCreator = () => {
-    return {type: ADD_MESSAGE} as const
-}
-
-export const updateNewMessageTextActionCreator = (text: string) => {
-    return {type: UPDATE_NEW_MESSAGE_TEXT, newMessage: text} as const
-}
+export type ActionType = ActionProfileType | ActionDialogsType
 
 let store: StoreType = {
     _state: {
@@ -91,7 +73,8 @@ let store: StoreType = {
                 {id: 3, message: 'Yo'},
             ],
             newMessageText: ''
-        }
+        },
+        sidebar: {}
     },
     _callSubsсriber() {
         console.log('State changed')
@@ -117,30 +100,11 @@ let store: StoreType = {
         this._callSubsсriber()
     },
     dispatch(action) {
-        if (action.type === ADD_POST) {
-            const newPost: PostType = {
-                id: 5,
-                message: this._state.profilePage.newPostText,
-                likeCounts: 0
-            }
-            this._state.profilePage.posts.push(newPost)
-            this._state.profilePage.newPostText = ''
-            this._callSubsсriber()
-        } else if (action.type === UPDATE_NEW_POST_TEXT) {
-            this._state.profilePage.newPostText = action.newText
-            this._callSubsсriber()
-        } else if (action.type === ADD_MESSAGE) {
-            const newMessage = {
-                id: 4,
-                message: this._state.dialogsPage.newMessageText,
-            }
-            this._state.dialogsPage.messages.push(newMessage)
-            this._state.dialogsPage.newMessageText = ''
-            this._callSubsсriber()
-        } else if (action.type === UPDATE_NEW_MESSAGE_TEXT) {
-            this._state.dialogsPage.newMessageText = action.newMessage
-            this._callSubsсriber()
-        }
+        this._state.profilePage = profileReducer(this._state.profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this._state.dialogsPage, action)
+        this._state.sidebar = sidebarReducer(this._state.sidebar, action)
+
+        this._callSubsсriber()
     }
 }
 
