@@ -41,15 +41,6 @@ export type StoreType = {
     dispatch: (action: ActionType) => void
 }
 
-type AddMessageActionType = {
-    type: 'ADD-MESSAGE'
-}
-
-type ChangeNewMessageActionType = {
-    type: 'UPDATE-NEW-MESSAGE-TEXT'
-    newMessage: string
-}
-
 export type ActionType =
     ReturnType<typeof addPostActionCreator> | ReturnType<typeof updateNewPostTextActionCreator> |
     ReturnType<typeof addMessageActionCreator> | ReturnType<typeof updateNewMessageTextActionCreator>
@@ -84,7 +75,7 @@ let store: StoreType = {
                 {id: 3, message: 'My post', likeCounts: 36},
                 {id: 4, message: 'My daas', likeCounts: 36},
             ],
-            newPostText: 'Flux Post',
+            newPostText: '',
         },
         dialogsPage: {
             dialogs: [
@@ -99,7 +90,7 @@ let store: StoreType = {
                 {id: 2, message: 'How are you'},
                 {id: 3, message: 'Yo'},
             ],
-            newMessageText: 'Flux Message'
+            newMessageText: ''
         }
     },
     _callSubsсriber() {
