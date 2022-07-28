@@ -2,7 +2,12 @@ import React from 'react';
 import css from './Dialogs.module.css';
 import DialogItem from "./DialogItem/DialogItem";
 import Message from "./Message/Message";
-import {ActionType, DialogsPageType} from "../../redux/state";
+import {
+    ActionType,
+    addMessageActionCreator,
+    DialogsPageType,
+    updateNewMessageTextActionCreator
+} from "../../redux/state";
 
 
 type DialogsPropsType = {
@@ -19,12 +24,12 @@ const Dialogs = (props: DialogsPropsType) => {
     let refToTextarea = React.createRef<HTMLTextAreaElement>()
 
     const addMessage = () => {
-        props.dispatch({type: "ADD-MESSAGE"})
+        props.dispatch(addMessageActionCreator())
     }
 
     const onChangeMessage = () => {
         let text = refToTextarea.current?.value as string
-        props.dispatch({type: "UPDATE-NEW-MESSAGE-TEXT", newMessage: text})
+        props.dispatch(updateNewMessageTextActionCreator(text))
     }
 
     return (
