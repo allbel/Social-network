@@ -30,70 +30,80 @@ export type StateType = {
     dialogsPage: DialogsPageType
 }
 
-let state: StateType = {
-    profilePage: {
-        posts: [
-            {id: 1, message: 'Hi', likeCounts: 25},
-            {id: 2, message: 'My first post', likeCounts: 36},
-            {id: 3, message: 'My post', likeCounts: 36},
-            {id: 4, message: 'My daas', likeCounts: 36},
-        ],
-        newPostText: 'Flux Post',
+export type StoreType = {
+    _state: StateType
+    getState: () => StateType
+    _callSubsriber: () => void
+    addPost: () => void
+    updateNewPostText: (newText: string) => void
+    subsribe: (observer: () => void) => void
+    addMessage: () => void
+    updateNewMessageText: (newMessge: string) => void
+}
+
+let store: StoreType = {
+    _state: {
+        profilePage: {
+            posts: [
+                {id: 1, message: 'Hi', likeCounts: 25},
+                {id: 2, message: 'My first post', likeCounts: 36},
+                {id: 3, message: 'My post', likeCounts: 36},
+                {id: 4, message: 'My daas', likeCounts: 36},
+            ],
+            newPostText: 'Flux Post',
+        },
+        dialogsPage: {
+            dialogs: [
+                {id: 1, name: 'Dimych'},
+                {id: 2, name: 'Sveta'},
+                {id: 3, name: 'Sasha'},
+                {id: 4, name: 'Viktor'},
+                {id: 5, name: 'Valera'},
+            ],
+            messages: [
+                {id: 1, message: 'Hi'},
+                {id: 2, message: 'How are you'},
+                {id: 3, message: 'Yo'},
+            ],
+            newMessageText: 'Flux Message'
+        }
     },
-    dialogsPage: {
-        dialogs: [
-            {id: 1, name: 'Dimych'},
-            {id: 2, name: 'Sveta'},
-            {id: 3, name: 'Sasha'},
-            {id: 4, name: 'Viktor'},
-            {id: 5, name: 'Valera'},
-        ],
-        messages: [
-            {id: 1, message: 'Hi'},
-            {id: 2, message: 'How are you'},
-            {id: 3, message: 'Yo'},
-        ],
-        newMessageText: 'Flux Message'
+    getState() {
+        return this._state
+    },
+    _callSubsriber() {
+        console.log('State changed')
+    },
+    addPost() {
+        const newPost: PostType = {
+            id: 5,
+            message: this._state.profilePage.newPostText,
+            likeCounts: 0
+        }
+        this._state.profilePage.posts.push(newPost)
+        this._state.profilePage.newPostText = ''
+        this._callSubsriber()
+    },
+    updateNewPostText(newText) {
+        this._state.profilePage.newPostText = newText
+        this._callSubsriber()
+    },
+    subsribe(observer) {
+        this._callSubsriber = observer;
+    },
+    addMessage() {
+        const newMessage = {
+            id: 4,
+            message: this._state.dialogsPage.newMessageText,
+        }
+        this._state.dialogsPage.messages.push(newMessage)
+        this._state.dialogsPage.newMessageText = ''
+        this._callSubsriber()
+    },
+    updateNewMessageText(newMessge) {
+        this._state.dialogsPage.newMessageText = newMessge
+        this._callSubsriber()
     }
 }
 
-let rerenderEntireTree = (state: StateType) => {
-    console.log('State changed')
-}
-
-export const subsribe = (observer: (state: StateType) => void) => {
-    rerenderEntireTree = observer;
-}
-
-export const addPost = () => {
-    const newPost: PostType = {
-        id: 5,
-        message: state.profilePage.newPostText,
-        likeCounts: 0
-    }
-    state.profilePage.posts.push(newPost)
-    state.profilePage.newPostText = ''
-    rerenderEntireTree(state)
-}
-
-export const updateNewPostText = (newText: string) => {
-    state.profilePage.newPostText = newText
-    rerenderEntireTree(state)
-}
-
-export const addMessage = () => {
-    const newMessage = {
-        id: 4,
-        message: state.dialogsPage.newMessageText,
-    }
-    state.dialogsPage.messages.push(newMessage)
-    state.dialogsPage.newMessageText = ''
-    rerenderEntireTree(state)
-}
-
-export const updateNewMessageText = (newMessge: string) => {
-    state.dialogsPage.newMessageText = newMessge
-    rerenderEntireTree(state)
-}
-
-export default state
+export default store
