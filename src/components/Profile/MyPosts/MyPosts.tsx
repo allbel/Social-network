@@ -1,14 +1,13 @@
 import React from 'react';
 import css from './MyPosts.module.css';
 import Post from "./Post/Post";
-import {PostType} from "../../../redux/state";
+import {ActionType, PostType} from "../../../redux/state";
 
 
 type MyPostsPropsType = {
     posts: Array<PostType>
     newPostText: string
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
+    dispatch: (action: ActionType) => void
 }
 
 function MyPosts(props: MyPostsPropsType) {
@@ -21,9 +20,15 @@ function MyPosts(props: MyPostsPropsType) {
 
     let newPostElement = React.createRef<HTMLTextAreaElement>()
 
+    const addPost = () => {
+        // props.addPost()
+        props.dispatch({type: "ADD-POST"})
+    }
+
     const onPostChange = () => {
-        const text = newPostElement.current?.value
-        props.updateNewPostText(text as string)
+        const text = newPostElement.current?.value as string
+        // props.updateNewPostText(text as string)
+        props.dispatch({type: "UPDATE-NEW-POST-TEXT", newText: text})
     }
 
     return (
@@ -34,7 +39,7 @@ function MyPosts(props: MyPostsPropsType) {
                     <textarea onChange={onPostChange} ref={newPostElement} value={props.newPostText}/>
                 </div>
                 <div>
-                    <button onClick={props.addPost}>Add post</button>
+                    <button onClick={addPost}>Add post</button>
                 </div>
             </div>
             <div className={css.posts}>

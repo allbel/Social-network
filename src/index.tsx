@@ -9,10 +9,7 @@ const rerenderEntireTree = () => {
     ReactDOM.render(
         <App
             state={store.getState()}
-            addPost={store.addPost.bind(store)}
-            updateNewPostText={store.updateNewPostText.bind(store)}
-            addMessage={store.addMessage.bind(store)}
-            updateNewMessageText={store.updateNewMessageText.bind(store)}
+            dispatch={store.dispatch.bind(store)}
         />,
         document.getElementById('root'));
 }
@@ -20,4 +17,4 @@ const rerenderEntireTree = () => {
 
 rerenderEntireTree();
 
-store.subsribe(rerenderEntireTree)
+store.subsсribe(rerenderEntireTree)

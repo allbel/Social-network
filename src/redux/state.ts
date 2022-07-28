@@ -32,14 +32,36 @@ export type StateType = {
 
 export type StoreType = {
     _state: StateType
+    _callSubsсriber: () => void
     getState: () => StateType
-    _callSubsriber: () => void
-    addPost: () => void
-    updateNewPostText: (newText: string) => void
-    subsribe: (observer: () => void) => void
+    subsсribe: (observer: () => void) => void
+
     addMessage: () => void
     updateNewMessageText: (newMessge: string) => void
+    dispatch: (action: ActionType) => void
 }
+
+type AddPostActionType = {
+    type: 'ADD-POST'
+}
+
+type ChangeNewTextActionType = {
+    type: 'UPDATE-NEW-POST-TEXT'
+    newText: string
+}
+
+type AddMessageActionType = {
+    type: 'ADD-MESSAGE'
+}
+
+type ChangeNewMessageActionType = {
+    type: 'UPDATE-NEW-MESSAGE-TEXT'
+    newMessage: string
+}
+
+export type ActionType =
+    AddPostActionType | ChangeNewTextActionType |
+    AddMessageActionType | ChangeNewMessageActionType
 
 let store: StoreType = {
     _state: {
@@ -68,29 +90,16 @@ let store: StoreType = {
             newMessageText: 'Flux Message'
         }
     },
+    _callSubsсriber() {
+        console.log('State changed')
+    },
     getState() {
         return this._state
     },
-    _callSubsriber() {
-        console.log('State changed')
+    subsсribe(observer) {
+        this._callSubsсriber = observer;
     },
-    addPost() {
-        const newPost: PostType = {
-            id: 5,
-            message: this._state.profilePage.newPostText,
-            likeCounts: 0
-        }
-        this._state.profilePage.posts.push(newPost)
-        this._state.profilePage.newPostText = ''
-        this._callSubsriber()
-    },
-    updateNewPostText(newText) {
-        this._state.profilePage.newPostText = newText
-        this._callSubsriber()
-    },
-    subsribe(observer) {
-        this._callSubsriber = observer;
-    },
+
     addMessage() {
         const newMessage = {
             id: 4,
@@ -98,11 +107,37 @@ let store: StoreType = {
         }
         this._state.dialogsPage.messages.push(newMessage)
         this._state.dialogsPage.newMessageText = ''
-        this._callSubsriber()
+        this._callSubsсriber()
     },
     updateNewMessageText(newMessge) {
         this._state.dialogsPage.newMessageText = newMessge
-        this._callSubsriber()
+        this._callSubsсriber()
+    },
+    dispatch(action) {
+        if (action.type === 'ADD-POST') {
+            const newPost: PostType = {
+                id: 5,
+                message: this._state.profilePage.newPostText,
+                likeCounts: 0
+            }
+            this._state.profilePage.posts.push(newPost)
+            this._state.profilePage.newPostText = ''
+            this._callSubsсriber()
+        } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+            this._state.profilePage.newPostText = action.newText
+            this._callSubsсriber()
+        } else if (action.type === 'ADD-MESSAGE') {
+            const newMessage = {
+                id: 4,
+                message: this._state.dialogsPage.newMessageText,
+            }
+            this._state.dialogsPage.messages.push(newMessage)
+            this._state.dialogsPage.newMessageText = ''
+            this._callSubsсriber()
+        } else if (action.type === 'UPDATE-NEW-MESSAGE-TEXT') {
+            this._state.dialogsPage.newMessageText = action.newMessage
+            this._callSubsсriber()
+        }
     }
 }
 
