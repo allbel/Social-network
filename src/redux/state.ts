@@ -40,9 +40,6 @@ export type StoreType = {
     _callSubsсriber: () => void
     getState: () => StateType
     subsсribe: (observer: () => void) => void
-
-    addMessage: () => void
-    updateNewMessageText: (newMessge: string) => void
     dispatch: (action: ActionType) => void
 }
 
@@ -84,20 +81,6 @@ let store: StoreType = {
     },
     subsсribe(observer) {
         this._callSubsсriber = observer;
-    },
-
-    addMessage() {
-        const newMessage = {
-            id: 4,
-            message: this._state.dialogsPage.newMessageText,
-        }
-        this._state.dialogsPage.messages.push(newMessage)
-        this._state.dialogsPage.newMessageText = ''
-        this._callSubsсriber()
-    },
-    updateNewMessageText(newMessge) {
-        this._state.dialogsPage.newMessageText = newMessge
-        this._callSubsсriber()
     },
     dispatch(action) {
         this._state.profilePage = profileReducer(this._state.profilePage, action)
