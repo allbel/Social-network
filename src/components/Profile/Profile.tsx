@@ -5,7 +5,7 @@ import {StoreTypeNative} from "../../App";
 
 
 type ProfilePropsType = {
-    store: StoreTypeNative
+    // store: StoreTypeNative
 }
 
 function Profile(props: ProfilePropsType) {
@@ -14,7 +14,7 @@ function Profile(props: ProfilePropsType) {
         <div>
             <ProfileInfo />
             <MyPostsContainer
-                store={props.store}
+                // store={props.store}
             />
         </div>
     );
