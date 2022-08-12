@@ -7,12 +7,8 @@ import {Route} from 'react-router-dom';
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from './components/Settings/Settings';
-import {StateType} from "./redux/store";
-import {EmptyObject, Store} from "redux";
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
 
-
-export type StoreTypeNative = Store<EmptyObject & StateType, any>
 
 type AppPropsType = {
     // store: StoreTypeNative
