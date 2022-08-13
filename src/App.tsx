@@ -8,13 +8,10 @@ import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from './components/Settings/Settings';
 import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import UsersContainer from "./components/Users/UsersContainer";
 
 
-type AppPropsType = {
-    // store: StoreTypeNative
-    // state: StateType
-    // dispatch: (action: ActionType) => void
-}
+type AppPropsType = {}
 
 function App(props: AppPropsType) {
 
@@ -25,19 +22,15 @@ function App(props: AppPropsType) {
                 <Navbar/>
 
                 <div className='app-wrapper-content'>
-
                     <Route path='/dialogs'
-                           render={() => <DialogsContainer
-                               // store={props.store}
-                           />}/>
+                           render={() => <DialogsContainer/>}/>
                     <Route path='/profile'
-                           render={() => <Profile
-                               // store={props.store}
-                           />}/>
+                           render={() => <Profile/>}/>
+                    <Route path='/users'
+                           render={() => <UsersContainer/> }/>
                     <Route path='/news' render={() => <News/>}/>
                     <Route path='/music' render={() => <Music/>}/>
                     <Route path='/settings' render={() => <Settings/>}/>
-
                 </div>
             </div>
     );
