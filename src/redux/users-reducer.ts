@@ -26,33 +26,25 @@ export type UserType = {
     followed: boolean
 }
 
-type UsersPageType = {
+export type UsersPageType = {
     users: Array<UserType>
+    pageSize: number
+    totalUsersCount: number
+    currentPage: number
 }
 
 const initialState: UsersPageType = {
-    users: [
-        // {
-        //     id: 1,
-        //     photoUrl: 'https://banner2.cleanpng.com/20180430/jge/kisspng-computer-icons-font-awesome-hamburger-button-5ae723a4ebfc72.3953800615250973809666.jpg',
-        //     followed: false, fullName: 'Aleksandr', status: 'I am a boss', location: {city: 'Moscow', country: 'Russia'}
-        // },
-        // {
-        //     id: 2,
-        //     photoUrl: 'https://banner2.cleanpng.com/20180430/jge/kisspng-computer-icons-font-awesome-hamburger-button-5ae723a4ebfc72.3953800615250973809666.jpg',
-        //     followed: true, fullName: 'Dmitry', status: 'I am a boss too', location: {city: 'Minsk', country: 'Belarus'}
-        // },
-        // {
-        //     id: 3,
-        //     photoUrl: 'https://banner2.cleanpng.com/20180430/jge/kisspng-computer-icons-font-awesome-hamburger-button-5ae723a4ebfc72.3953800615250973809666.jpg',
-        //     followed: false, fullName: 'Viktor', status: 'I am a boss too', location: {city: 'Kiev', country: 'Ukraine'}
-        // },
-    ]
+    users: [],
+    pageSize: 10,
+    totalUsersCount: 0,
+    currentPage: 1,
 }
 
 const FOLLOW = 'FOLLOW'
 const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT'
 
 const usersReducer = (state: UsersPageType = initialState, action: ActionUsersType): UsersPageType => {
     switch (action.type) {
@@ -61,7 +53,11 @@ const usersReducer = (state: UsersPageType = initialState, action: ActionUsersTy
         case UNFOLLOW:
             return {...state, users: state.users.map(u => u.id === action.userID ? {...u, followed: false} : u)}
         case SET_USERS:
-            return {...state, users: [...state.users, ...action.users]}
+            return {...state, users: action.users}
+        case SET_CURRENT_PAGE:
+            return {...state, currentPage: action.currentPage}
+        case SET_TOTAL_USERS_COUNT:
+            return {...state, totalUsersCount: action.totalCount}
         default:
             return state
     }
@@ -69,13 +65,19 @@ const usersReducer = (state: UsersPageType = initialState, action: ActionUsersTy
 
 
 export type ActionUsersType =
-    ReturnType<typeof followAC> | ReturnType<typeof unfollowAC> | ReturnType<typeof setUsersAC>
+    ReturnType<typeof followAC> | ReturnType<typeof unfollowAC> |
+    ReturnType<typeof setUsersAC> | ReturnType<typeof setCurrentPageAC> |
+    ReturnType<typeof setTotalUsersCountAC>
 
 export const followAC = (userID: number) => ({type: FOLLOW, userID} as const)
 
 export const unfollowAC = (userID: number) => ({type: UNFOLLOW, userID} as const)
 
 export const setUsersAC = (users: Array<UserType>) => ({type: SET_USERS, users} as const)
+
+export const setCurrentPageAC = (currentPage: number) => ({type: SET_CURRENT_PAGE, currentPage} as const)
+
+export const setTotalUsersCountAC = (totalCount: number) => ({type: SET_TOTAL_USERS_COUNT, totalCount} as const)
 
 
 export default usersReducer
