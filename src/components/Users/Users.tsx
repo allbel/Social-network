@@ -1,7 +1,14 @@
 import React from 'react';
 import s from "./Users.module.css";
 import userPhoto from "../../assets/images/user.jpg";
-import {UsersPageType} from "../../redux/users-reducer";
+import {UsersPageType, UserType} from "../../redux/users-reducer";
+
+type UsersDataPropsType = {
+    users: Array<UserType>
+    pageSize: number
+    totalUsersCount: number
+    currentPage: number
+}
 
 type UsersCallbackPropsType = {
     onPageChanged: (currentPage: number) => void
@@ -9,7 +16,7 @@ type UsersCallbackPropsType = {
     unfollow: (userID: number) => void
 }
 
-type UsersPropsType = UsersPageType & UsersCallbackPropsType
+type UsersPropsType = UsersDataPropsType & UsersCallbackPropsType
 
 const Users = (props: UsersPropsType) => {
 

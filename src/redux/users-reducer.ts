@@ -31,6 +31,7 @@ export type UsersPageType = {
     pageSize: number
     totalUsersCount: number
     currentPage: number
+    isFetching: boolean
 }
 
 const initialState: UsersPageType = {
@@ -38,6 +39,7 @@ const initialState: UsersPageType = {
     pageSize: 10,
     totalUsersCount: 0,
     currentPage: 1,
+    isFetching: false,
 }
 
 const FOLLOW = 'FOLLOW'
@@ -45,6 +47,7 @@ const UNFOLLOW = 'UNFOLLOW'
 const SET_USERS = 'SET_USERS'
 const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 const SET_TOTAL_USERS_COUNT = 'SET_TOTAL_USERS_COUNT'
+const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
 
 const usersReducer = (state: UsersPageType = initialState, action: ActionUsersType): UsersPageType => {
     switch (action.type) {
@@ -58,6 +61,8 @@ const usersReducer = (state: UsersPageType = initialState, action: ActionUsersTy
             return {...state, currentPage: action.currentPage}
         case SET_TOTAL_USERS_COUNT:
             return {...state, totalUsersCount: action.totalCount}
+        case TOGGLE_IS_FETCHING:
+            return {...state, isFetching: action.isFetching}
         default:
             return state
     }
@@ -67,7 +72,7 @@ const usersReducer = (state: UsersPageType = initialState, action: ActionUsersTy
 export type ActionUsersType =
     ReturnType<typeof followAC> | ReturnType<typeof unfollowAC> |
     ReturnType<typeof setUsersAC> | ReturnType<typeof setCurrentPageAC> |
-    ReturnType<typeof setTotalUsersCountAC>
+    ReturnType<typeof setTotalUsersCountAC> | ReturnType<typeof toggleIsFetchingAC>
 
 export const followAC = (userID: number) => ({type: FOLLOW, userID} as const)
 
@@ -78,6 +83,8 @@ export const setUsersAC = (users: Array<UserType>) => ({type: SET_USERS, users} 
 export const setCurrentPageAC = (currentPage: number) => ({type: SET_CURRENT_PAGE, currentPage} as const)
 
 export const setTotalUsersCountAC = (totalCount: number) => ({type: SET_TOTAL_USERS_COUNT, totalCount} as const)
+
+export const toggleIsFetchingAC = (isFetching: boolean) => ({type: TOGGLE_IS_FETCHING, isFetching} as const)
 
 
 export default usersReducer
