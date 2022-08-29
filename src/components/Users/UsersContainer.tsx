@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from "react-redux";
-import Users from "./Users";
 import {StateType} from "../../redux/redux-store";
 import {Dispatch} from "redux";
 import {
@@ -12,6 +11,40 @@ import {
     UsersPageType,
     UserType
 } from "../../redux/users-reducer";
+import axios from "axios";
+import Users from "./Users";
+
+
+class UsersContainer extends React.Component<UsersAPIComponentPropsType>{
+
+    componentDidMount() {
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`)
+            .then(response => {
+                this.props.setUsers(response.data.items)
+                this.props.setTotalUsersCount(response.data.totalCount)
+            })
+    }
+
+    onPageChanged = (currentPage: number) => {
+        this.props.setCurrentPage(currentPage)
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${currentPage}&count=${this.props.pageSize}`)
+            .then(response => {
+                this.props.setUsers(response.data.items)
+            })
+    }
+
+    render() {
+        return <Users
+            users={this.props.users}
+            pageSize={this.props.pageSize}
+            totalUsersCount={this.props.totalUsersCount}
+            currentPage={this.props.currentPage}
+            onPageChanged={this.onPageChanged}
+            follow={this.props.follow}
+            unfollow={this.props.unfollow}
+        />
+    }
+}
 
 
 type MapStateUsersPropsType = UsersPageType
@@ -24,7 +57,7 @@ type MapDispatchUsersPropsType = {
     setTotalUsersCount: (totalCount: number) => void
 }
 
-export type UsersPropsType = MapStateUsersPropsType & MapDispatchUsersPropsType
+export type UsersAPIComponentPropsType = MapStateUsersPropsType & MapDispatchUsersPropsType
 
 const mapStateToProps = (state: StateType): MapStateUsersPropsType => {
     return {
@@ -55,4 +88,4 @@ const mapDispatchToProps = (dispatch: Dispatch): MapDispatchUsersPropsType => {
     }
 }
 
-export default connect<MapStateUsersPropsType, MapDispatchUsersPropsType, {}, StateType>(mapStateToProps, mapDispatchToProps)(Users);
+export default connect<MapStateUsersPropsType, MapDispatchUsersPropsType, {}, StateType>(mapStateToProps, mapDispatchToProps)(UsersContainer);
