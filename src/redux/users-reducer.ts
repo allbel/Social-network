@@ -12,7 +12,7 @@
 //     location: LocationUser
 // }
 
-type PhotoType = {
+export type PhotoType = {
     small: null | string
     large: null | string
 }

@@ -1,20 +1,19 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import ProfileInfo from "./ProfileInfo/ProfileInfo";
 import MyPostsContainer from "./MyPosts/MyPostsContainer";
+import {ProfileContainerPropsType} from "./ProfileContainer";
 
 
-type ProfilePropsType = {
-    // store: StoreTypeNative
+type ProfilePropsType = ProfileContainerPropsType & {
+    children?: ReactNode;
 }
 
 function Profile(props: ProfilePropsType) {
 
     return (
         <div>
-            <ProfileInfo />
-            <MyPostsContainer
-                // store={props.store}
-            />
+            <ProfileInfo profile={props.profile} />
+            <MyPostsContainer />
         </div>
     );
 };
