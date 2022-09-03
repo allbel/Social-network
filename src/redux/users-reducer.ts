@@ -1,17 +1,3 @@
-// type LocationUser = {
-//     city: string
-//     country: string
-// }
-//
-// export type UserType = {
-//     id: number
-//     photoUrl: string
-//     followed: boolean
-//     fullName: string
-//     status: string
-//     location: LocationUser
-// }
-
 export type PhotoType = {
     small: null | string
     large: null | string
