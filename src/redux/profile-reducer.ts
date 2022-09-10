@@ -1,4 +1,6 @@
 import {PhotoType} from "./users-reducer";
+import {Dispatch} from "redux";
+import {usersAPI} from "../api/api";
 
 export type PostType = {
     id: number
@@ -76,6 +78,12 @@ export const updateNewPostTextActionCreator = (text: string) => {
 
 export const setUserProfile = (profile: ProfileType) => {
     return {type: SET_USER_PROFILE, profile} as const
+}
+
+export const getUserProfile = (userId: string) => (dispatch: Dispatch) => {
+    usersAPI.getProfile(userId).then(response => {
+        dispatch(setUserProfile(response.data))
+    })
 }
 
 export default profileReducer
