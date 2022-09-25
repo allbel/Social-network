@@ -2,6 +2,7 @@ import React from 'react';
 import css from './MyPosts.module.css';
 import Post from "./Post/Post";
 import {MyPostsPropsType} from "./MyPostsContainer";
+import {Field, InjectedFormProps, reduxForm} from "redux-form";
 
 
 function MyPosts(props: MyPostsPropsType) {
@@ -12,33 +13,38 @@ function MyPosts(props: MyPostsPropsType) {
             message={p.message}
             likeCounts={p.likeCounts}/>)
 
-    let newPostElement = React.createRef<HTMLTextAreaElement>()
-
-    const onAddPost = () => {
-        props.addPost()
-    }
-
-    const onPostChange = () => {
-        const text = newPostElement.current?.value as string
-        props.updateNewPostText(text)
+    const onAddPost = (values: FormDataType) => {
+        props.addPost(values.newPostText)
     }
 
     return (
         <div className={css.postsBlock}>
             <h3>My posts</h3>
-            <div>
-                <div>
-                    <textarea onChange={onPostChange} ref={newPostElement} value={props.newPostText}/>
-                </div>
-                <div>
-                    <button onClick={onAddPost}>Add post</button>
-                </div>
-            </div>
+            <AddNewPostFormRedux onSubmit={onAddPost}/>
             <div className={css.posts}>
                 {postsElements}
             </div>
         </div>
     );
 };
+
+type FormDataType = {
+    newPostText: string
+}
+
+const AddNewPostForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <div>
+                <Field component={'textarea'} name={'newPostText'} placeholder={'Enter your post'}/>
+            </div>
+            <div>
+                <button>Add post</button>
+            </div>
+        </form>
+    )
+}
+
+const AddNewPostFormRedux = reduxForm<FormDataType>({form: "profileAddNewPostForm"})(AddNewPostForm)
 
 export default MyPosts;
