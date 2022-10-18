@@ -7,29 +7,6 @@ import {maxLengthCreator, required} from "../../../utils/validators/validators";
 import {Textarea} from "../../common/FormsControls/FormsControls";
 
 
-function MyPosts(props: MyPostsPropsType) {
-
-    let postsElements = props.posts.map(p =>
-        <Post
-            id={p.id}
-            message={p.message}
-            likeCounts={p.likeCounts}/>)
-
-    const onAddPost = (values: FormDataType) => {
-        props.addPost(values.newPostText)
-    }
-
-    return (
-        <div className={css.postsBlock}>
-            <h3>My posts</h3>
-            <AddNewPostFormRedux onSubmit={onAddPost}/>
-            <div className={css.posts}>
-                {postsElements}
-            </div>
-        </div>
-    );
-};
-
 type FormDataType = {
     newPostText: string
 }
@@ -52,5 +29,28 @@ const AddNewPostForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
 }
 
 const AddNewPostFormRedux = reduxForm<FormDataType>({form: "profileAddNewPostForm"})(AddNewPostForm)
+
+function MyPosts(props: MyPostsPropsType) {
+
+    let postsElements = props.posts.map(p =>
+        <Post
+            id={p.id}
+            message={p.message}
+            likeCounts={p.likeCounts}/>)
+
+    const onAddPost = (values: FormDataType) => {
+        props.addPost(values.newPostText)
+    }
+
+    return (
+        <div className={css.postsBlock}>
+            <h3>My posts</h3>
+            <AddNewPostFormRedux onSubmit={onAddPost}/>
+            <div className={css.posts}>
+                {postsElements}
+            </div>
+        </div>
+    );
+};
 
 export default MyPosts;

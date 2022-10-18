@@ -11,7 +11,6 @@ export type DialogType = {
 export type DialogsPageType = {
     messages: Array<MessageType>
     dialogs: Array<DialogType>
-    // newMessageText: string
 }
 
 let initialState: DialogsPageType = {
@@ -27,7 +26,6 @@ let initialState: DialogsPageType = {
         {id: 2, message: 'How are you'},
         {id: 3, message: 'Yo'},
     ],
-    // newMessageText: ''
 }
 
 const ADD_MESSAGE = 'ADD-MESSAGE'
@@ -47,9 +45,9 @@ const dialogsReducer = (state: DialogsPageType = initialState, action: ActionDia
 
 }
 
-export type ActionDialogsType = ReturnType<typeof addMessageActionCreator>
+export type ActionDialogsType = ReturnType<typeof addMessageAС>
 
-export const addMessageActionCreator = (message: string) => {
+export const addMessageAС = (message: string) => {
     return {type: ADD_MESSAGE, message} as const
 }
 

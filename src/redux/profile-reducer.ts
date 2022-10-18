@@ -65,10 +65,10 @@ const profileReducer = (state: ProfilePageType = initialState, action: ActionPro
 }
 
 export type ActionProfileType =
-    ReturnType<typeof addPostActionCreator> |
+    ReturnType<typeof addPostAC> |
     ReturnType<typeof setUserProfile> | ReturnType<typeof setStatusProfile>
 
-export const addPostActionCreator = (text: string) => {
+export const addPostAC = (text: string) => {
     return {type: ADD_POST, text} as const
 }
 

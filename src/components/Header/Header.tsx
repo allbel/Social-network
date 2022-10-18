@@ -10,7 +10,9 @@ function Header(props: HeaderPropsType) {
         <header className={css.header}>
             <img src="https://i.pinimg.com/originals/23/80/0b/23800b995292379883a15d9a4c382b22.png" alt=""/>
             <div className={css.loginBlock}>
-                {props.isAuth ? props.login : <NavLink to={'/login'}>Login</NavLink>}
+                {props.isAuth
+                    ? <div>{props.login} - <button onClick={props.logout}>Logout</button></div>
+                    : <NavLink to={'/login'}>Login</NavLink>}
             </div>
         </header>
     );
