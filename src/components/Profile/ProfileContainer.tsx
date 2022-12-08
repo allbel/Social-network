@@ -11,12 +11,15 @@ import {IdType} from "../../redux/auth-reducer";
 class ProfileContainer extends React.Component<ProfileContainerPropsType>{
 
     componentDidMount() {
-        let userId = this.props.match.params.userId
+        let userId: string | IdType = this.props.match.params.userId
         if (!userId) {
-            userId = String(this.props.userId)
+            userId = this.props.authUserId
+            if (!userId) {
+                this.props.history.push("/login")
+            }
         }
-        this.props.getUserProfile(userId)
-        this.props.getStatusProfile(userId)
+        this.props.getUserProfile(String(userId))
+        this.props.getStatusProfile(String(userId))
     }
 
     render() {
@@ -31,7 +34,7 @@ class ProfileContainer extends React.Component<ProfileContainerPropsType>{
 type MapStateProfileContainerPropsType = {
     profile: ProfileType
     status: string
-    userId: IdType
+    authUserId: IdType
     isAuth: boolean
 }
 
@@ -54,7 +57,7 @@ export type ProfileContainerPropsType =
 const mapStateToProps = (state: StateType): MapStateProfileContainerPropsType => ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
-    userId: state.auth.id,
+    authUserId: state.auth.id,
     isAuth: state.auth.isAuth,
 })
 
@@ -65,5 +68,4 @@ export default compose<React.ComponentType>(
         updateStatusProfile
     }),
     withRouter,
-    // withAuthRedirect
 )(ProfileContainer)
