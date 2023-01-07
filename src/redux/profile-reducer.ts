@@ -89,24 +89,21 @@ export const deletePostAC = (id: number) => {
     return {type: DELETE_POST, id} as const
 }
 
-export const getUserProfile = (userId: string) => (dispatch: Dispatch) => {
-    usersAPI.getProfile(userId).then(response => {
-        dispatch(setUserProfile(response.data))
-    })
+export const getUserProfile = (userId: string) => async (dispatch: Dispatch) => {
+    const response = await usersAPI.getProfile(userId)
+    dispatch(setUserProfile(response.data))
 }
 
-export const getStatusProfile = (userId: string) => (dispatch: Dispatch) => {
-    profileAPI.getStatus(userId).then(response => {
-        dispatch(setStatusProfile(response.data))
-    })
+export const getStatusProfile = (userId: string) => async (dispatch: Dispatch) => {
+    const response = await profileAPI.getStatus(userId)
+    dispatch(setStatusProfile(response.data))
 }
 
-export const updateStatusProfile = (status: string) => (dispatch: Dispatch) => {
-    profileAPI.updateStatus(status).then(response => {
-        if (response.data.resultCode === 0) {
-            dispatch(setStatusProfile(status))
-        }
-    })
+export const updateStatusProfile = (status: string) => async (dispatch: Dispatch) => {
+    const response = await profileAPI.updateStatus(status)
+    if (response.data.resultCode === 0) {
+        dispatch(setStatusProfile(status))
+    }
 }
 
 export default profileReducer
