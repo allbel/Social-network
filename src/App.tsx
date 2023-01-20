@@ -1,7 +1,7 @@
 import React, {Suspense} from 'react';
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
-import {Route, withRouter} from 'react-router-dom';
+import {Redirect, Route, withRouter} from 'react-router-dom';
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from './components/Settings/Settings';
@@ -32,6 +32,10 @@ class App extends React.Component<AppPropsType> {
             return <Preloader/>
         }
 
+        // if (!this.props.isAuth) {
+        //     // return <Redirect to={'/login'}/>;
+        // }
+
         return (
             <div className='app-wrapper'>
                 <HeaderContainer/>
@@ -58,10 +62,12 @@ type AppPropsType = mapStateToPropsType & MapDispatchPropsType
 
 type mapStateToPropsType = {
     initialized: boolean
+    // isAuth: boolean
 }
 
 const mapStateToProps = (state: StateType): mapStateToPropsType => ({
     initialized: state.app.initialized,
+    // isAuth: state.auth.isAuth,
 })
 
 type MapDispatchPropsType = {
@@ -70,4 +76,5 @@ type MapDispatchPropsType = {
 
 export default compose<React.FC>(
     withRouter,
-    connect(mapStateToProps, {initializeApp}))(App);
+    connect(mapStateToProps, {initializeApp})
+)(App);
