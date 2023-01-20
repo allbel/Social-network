@@ -1,9 +1,8 @@
 {
   "name": "samurai-way",
-  "homepage": "https://allbel.github.io/Social-network",
   "version": "0.1.0",
   "private": true,
-  "homepage": "",
+  "homepage": "https://allbel.github.io/Social-network",
   "dependencies": {
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "12.0.0",
