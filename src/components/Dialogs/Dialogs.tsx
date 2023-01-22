@@ -34,8 +34,8 @@ const Dialogs = (props: DialogsPropsType) => {
 
     let state = props.dialogsPage
 
-    let dialogsElements = state.dialogs.map(d => <DialogItem id={d.id} name={d.name}/>)
-    let messagesElements = state.messages.map(m => <Message id={m.id} message={m.message}/>)
+    let dialogsElements = state.dialogs.map(d => <DialogItem key={d.id} id={d.id} name={d.name}/>)
+    let messagesElements = state.messages.map(m => <Message key={m.id} id={m.id} message={m.message}/>)
 
     const addMessage = (values: FormDataType) => {
         props.addMessage(values.newMessageText)

@@ -5,7 +5,9 @@ import {ProfileContainerPropsType} from "./ProfileContainer";
 
 
 type ProfilePropsType = ProfileContainerPropsType & {
-    children?: ReactNode;
+    children?: ReactNode
+    isOwner: boolean
+    savePhoto: (file: any) => void
 }
 
 function Profile(props: ProfilePropsType) {
@@ -14,7 +16,10 @@ function Profile(props: ProfilePropsType) {
         <div>
             <ProfileInfo profile={props.profile}
                          status={props.status}
-                         updateStatusProfile={props.updateStatusProfile}/>
+                         updateStatusProfile={props.updateStatusProfile}
+                         isOwner={props.isOwner}
+                         savePhoto={props.savePhoto}
+            />
             <MyPostsContainer />
         </div>
     );

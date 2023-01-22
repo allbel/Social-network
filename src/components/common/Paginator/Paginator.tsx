@@ -18,9 +18,10 @@ const Paginator = ({totalUsersCount, pageSize, currentPage, onPageChanged}: Pagi
 
     return (
         <div>
-            {pages.map(p => {
+            {pages.map((p, i) => {
                 return (
                     <span
+                        key={i}
                         className={currentPage === p ? s.selectedPage : undefined}
                         onClick={() => onPageChanged(p)}
                     >{p}</span>

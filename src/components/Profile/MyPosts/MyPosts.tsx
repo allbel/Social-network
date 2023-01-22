@@ -34,6 +34,7 @@ function MyPosts(props: MyPostsPropsType) {
 
     let postsElements = props.posts.map(p =>
         <Post
+            key={p.id}
             id={p.id}
             message={p.message}
             likeCounts={p.likeCounts}/>)
