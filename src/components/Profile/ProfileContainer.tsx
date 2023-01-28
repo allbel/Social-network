@@ -6,7 +6,7 @@ import {
     getStatusProfile,
     getUserProfile,
     ProfileType,
-    savePhoto,
+    savePhoto, saveProfile,
     updateStatusProfile
 } from "../../redux/profile-reducer";
 import {RouteComponentProps, withRouter} from "react-router-dom";
@@ -53,7 +53,7 @@ class ProfileContainer extends React.Component<ProfileContainerPropsType>{
 type MapStateProfileContainerPropsType = {
     profile: ProfileType
     status: string
-    authUserId: IdType
+    authUserId: string
     isAuth: boolean
 }
 
@@ -62,6 +62,7 @@ type MapDispatchProfileContainerPropsType = {
     getStatusProfile: (userId: string) => void
     updateStatusProfile: (status: string) => void
     savePhoto: (file: any) => void
+    saveProfile: (profile: ProfileType) => Promise<any>
 }
 
 type PathParamsType = {
@@ -87,6 +88,7 @@ export default compose<React.ComponentType>(
         getStatusProfile,
         updateStatusProfile,
         savePhoto,
+        saveProfile,
     }),
     withRouter,
 )(ProfileContainer)

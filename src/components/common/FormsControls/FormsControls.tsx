@@ -1,6 +1,6 @@
 import React from 'react';
 import s from './FormsControls.module.css'
-import {WrappedFieldMetaProps, WrappedFieldProps} from "redux-form";
+import {Field, WrappedFieldMetaProps, WrappedFieldProps} from "redux-form";
 
 type FormControlPropsType = {
     meta: WrappedFieldMetaProps
@@ -41,3 +41,22 @@ export const Input: React.FC<WrappedFieldProps> = (props) => {
         </FormControl>
     );
 };
+
+export const createField = (
+    placeholder: string,
+    name: string,
+    validators: any,
+    component: any,
+    props: any = {},
+    text: string = ""
+) => {
+    return <div>
+        <Field
+            placeholder={placeholder}
+            name={name}
+            validate={validators}
+            component={component}
+            {...props}
+        />
+    </div>
+}

@@ -1,6 +1,9 @@
 import {PhotoType} from "./users-reducer";
 import {Dispatch} from "redux";
 import {profileAPI, usersAPI} from "../api/api";
+import {StateType} from "./redux-store";
+import {ThunkAction} from "redux-thunk";
+import {stopSubmit} from "redux-form";
 
 export type PostType = {
     id: number
@@ -8,7 +11,7 @@ export type PostType = {
     likeCounts: number
 }
 
-type ContactsType = {
+export type ContactsType = {
     facebook: string
     website: null | string
     vk: string
@@ -120,5 +123,20 @@ export const savePhoto = (file: any) => async (dispatch: Dispatch) => {
         dispatch(savePhotoSuccessAC(response.data.data.photos))
     }
 }
+
+export const saveProfile = (profile: ProfileType): AuthThunkType => async (dispatch, getState): Promise<any> => {
+    const userId = getState().auth.id
+    const response = await profileAPI.saveProfile(profile)
+    if (response.data.resultCode === 0) {
+        dispatch(getUserProfile(userId))
+        return Promise.resolve(userId)
+    } else {
+        const key = response.data.messages[0].split('>')[1].slice(0,-1).toLowerCase()
+        dispatch(stopSubmit("edit-profile", {"contacts": {[key]: response.data.messages[0]}}))
+        return Promise.reject(response.data.messages[0])
+    }
+}
+
+type AuthThunkType<ReturnType = void> = ThunkAction<ReturnType, StateType, unknown, any>
 
 export default profileReducer

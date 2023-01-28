@@ -9,14 +9,14 @@ export type EmailType = null | string
 export type LoginType = null | string
 
 type AuthType = {
-    id: IdType
+    id: string
     email: EmailType
     login: LoginType
     isAuth: boolean
 }
 
 const initialState: AuthType = {
-    id: null,
+    id: '',
     email: null,
     login: null,
     isAuth: false
