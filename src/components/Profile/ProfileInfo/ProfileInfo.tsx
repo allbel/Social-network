@@ -43,7 +43,6 @@ const ProfileInfo = ({profile, status, updateStatusProfile, isOwner, savePhoto, 
                 <img src={profile.photos?.large || userPhoto} className={css.mainPhoto}/>
                 {isOwner && <input type={"file"} onChange={onMainPhotoSelected}/>}
                 {editMode
-                    // ? <ProfileDataForm profile={profile} initialValues={profile} onSubmit={onSubmit} />
                     ? <ProfileDataFormReduxForm initialValues={profile} profile={profile} onSubmit={onSubmit} />
                     : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={() => setEditMode(true)} /> }
             </div>
