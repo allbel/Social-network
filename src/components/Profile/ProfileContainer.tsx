@@ -12,6 +12,7 @@ import {
 import {RouteComponentProps, withRouter} from "react-router-dom";
 import {compose} from "redux";
 import {IdType} from "../../redux/auth-reducer";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 
 class ProfileContainer extends React.Component<ProfileContainerPropsType>{
@@ -91,4 +92,5 @@ export default compose<React.ComponentType>(
         saveProfile,
     }),
     withRouter,
+    withAuthRedirect,
 )(ProfileContainer)

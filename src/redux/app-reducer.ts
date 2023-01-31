@@ -5,7 +5,8 @@ import {ThunkAction} from "redux-thunk";
 const INITIALIZED_SUCCESS = 'INITIALIZED_SUCCESS'
 
 const initialState = {
-    initialized: false
+    initialized: false,
+    globalError: null
 }
 type InitialStateType = typeof initialState;
 

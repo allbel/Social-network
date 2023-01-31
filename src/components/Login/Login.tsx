@@ -21,46 +21,46 @@ type LoginReduxFormPropsType = {
 const LoginForm: React.FC<InjectedFormProps<FormDataType, LoginReduxFormPropsType> & LoginReduxFormPropsType> =
     ({
          handleSubmit, error, captchaUrl
-    }) => {
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <Field component={Input}
-                       name={'email'}
-                       placeholder={'email'}
-                       validate={[required]}
-                />
-            </div>
-            <div>
-                <Field component={Input}
-                       name={'password'}
-                       type={'password'}
-                       placeholder={'Password'}
-                       validate={[required]}
-                />
-            </div>
-            <div>
-                <Field component={Input}
-                       name={'rememberMe'}
-                       type={'checkbox'}
-                /> remember me
-            </div>
-            {captchaUrl &&
+     }) => {
+        return (
+            <form onSubmit={handleSubmit}>
                 <div>
+                    <Field component={Input}
+                           name={'email'}
+                           placeholder={'email'}
+                           validate={[required]}
+                    />
+                </div>
+                <div>
+                    <Field component={Input}
+                           name={'password'}
+                           type={'password'}
+                           placeholder={'Password'}
+                           validate={[required]}
+                    />
+                </div>
+                <div>
+                    <Field component={Input}
+                           name={'rememberMe'}
+                           type={'checkbox'}
+                    /> remember me
+                </div>
+                {captchaUrl &&
+                  <div>
                     <img src={captchaUrl} alt="captcha"/>
                     <Field component={Input}
-                         name={'captcha'}
-                         placeholder={'Symbols from image'}
-                         validate={[required]}
+                           name={'captcha'}
+                           placeholder={'Symbols from image'}
+                           validate={[required]}
                     />
-                </div>}
-            {error && <div className={'formSummaryError'}>{error}</div>}
-            <div>
-                <button>Login</button>
-            </div>
-        </form>
-    );
-};
+                  </div>}
+                {error && <div className={'formSummaryError'}>{error}</div>}
+                <div>
+                    <button>Login</button>
+                </div>
+            </form>
+        );
+    };
 
 const LoginReduxForm = reduxForm<FormDataType, LoginReduxFormPropsType>({form: 'login'})(LoginForm)
 
@@ -77,8 +77,13 @@ const Login = (props: LoginPropsType) => {
     }
 
     return (
-        <div>
+        <div style={{ padding: '0 0 20px 20px' }}>
             <h1>Login</h1>
+            <div>
+                <p>To log in use common test account credentials:</p>
+                <p><b>Email</b>: free@samuraijs.com</p>
+                <p><b>Password</b>: free</p>
+            </div>
             <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl}/>
         </div>
     );

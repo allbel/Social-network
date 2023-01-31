@@ -1,12 +1,12 @@
 import axios from "axios";
 import {CaptchaUrlType, EmailType} from "../redux/auth-reducer";
-import {ProfileType, saveProfile} from "../redux/profile-reducer";
+import {ProfileType} from "../redux/profile-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
     withCredentials: true,
     headers: {
-        "API-KEY": "4f8a82d1-a403-460a-a772-c2c60b837a88"
+        "API-KEY": process.env.REACT_APP_API_KEY as string
     }
 })
 

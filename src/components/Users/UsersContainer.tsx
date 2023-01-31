@@ -19,6 +19,7 @@ import {
     getTotalUsersCount,
     getUsers
 } from "../../redux/users-selectors";
+import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 
 class UsersContainer extends React.Component<UsersAPIComponentPropsType> {
@@ -107,5 +108,5 @@ export default compose<React.ComponentType>(
         follow, unfollow, setCurrentPage,
         toggleFollowingProgress, requestUsers
     }),
-    // withAuthRedirect
+    withAuthRedirect
 )(UsersContainer)

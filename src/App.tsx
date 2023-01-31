@@ -1,7 +1,7 @@
 import React, {Suspense} from 'react';
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
-import {Redirect, Route, withRouter} from 'react-router-dom';
+import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import News from "./components/News/News";
 import Music from "./components/Music/Music";
 import Settings from './components/Settings/Settings';
@@ -22,9 +22,17 @@ const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileCo
 
 
 class App extends React.Component<AppPropsType> {
+    catchAllUnhandledErrors = (promiseRejectionEvent: PromiseRejectionEvent) => {
+        // alert("promiseRejectionEvent")
+    }
 
     componentDidMount() {
         this.props.initializeApp()
+        window.addEventListener('unhandledrejection', this.catchAllUnhandledErrors)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('unhandledrejection', this.catchAllUnhandledErrors)
     }
 
     render() {
@@ -32,26 +40,27 @@ class App extends React.Component<AppPropsType> {
             return <Preloader/>
         }
 
-        // if (!this.props.isAuth) {
-        //     // return <Redirect to={'/login'}/>;
-        // }
-
         return (
             <div className='app-wrapper'>
                 <HeaderContainer/>
                 <Navbar/>
                 <div className='app-wrapper-content'>
-                    <Route path='/dialogs'
-                           render={withSuspense(DialogsContainer)}/>
-                    <Route path='/profile/:userId?'
-                           render={withSuspense(ProfileContainer)}/>
-                    <Route path='/users'
-                           render={() => <UsersContainer/>}/>
-                    <Route path='/login'
-                           render={() => <Login/>}/>
-                    <Route path='/news' render={() => <News/>}/>
-                    <Route path='/music' render={() => <Music/>}/>
-                    <Route path='/settings' render={() => <Settings/>}/>
+                    {/*<Switch>*/}
+                        <Route path='/'
+                               render={() => <Redirect to={'/login'}/>}/>
+                        <Route path='/dialogs'
+                               render={withSuspense(DialogsContainer)}/>
+                        <Route path='/profile/:userId?'
+                               render={withSuspense(ProfileContainer)}/>
+                        <Route path='/users'
+                               render={() => <UsersContainer/>}/>
+                        <Route path='/login'
+                               render={() => <Login/>}/>
+                        <Route path='/news' render={() => <News/>}/>
+                        <Route path='/music' render={() => <Music/>}/>
+                        <Route path='/settings' render={() => <Settings/>}/>
+                        {/*<Route path='*' render={() => <div>404 Not found</div>}/>*/}
+                    {/*</Switch>*/}
                 </div>
             </div>
         );
@@ -62,12 +71,10 @@ type AppPropsType = mapStateToPropsType & MapDispatchPropsType
 
 type mapStateToPropsType = {
     initialized: boolean
-    // isAuth: boolean
 }
 
 const mapStateToProps = (state: StateType): mapStateToPropsType => ({
     initialized: state.app.initialized,
-    // isAuth: state.auth.isAuth,
 })
 
 type MapDispatchPropsType = {
