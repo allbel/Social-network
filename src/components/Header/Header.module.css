@@ -1,26 +1,53 @@
 .header {
-    grid-area: header;
-    background-color: #B3E0FF;
+    min-width: 100%;
     display: flex;
     justify-content: space-between;
+    background-color: #2c4141;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    min-height: 60px;
+}
+
+.smallLogoAvatar {
+    width: 40px;
+    margin: 5px;
+    border-radius: 50%;
+}
+.logoApp{
+    width: 40px;
+    height: 40px;
+    margin: 10px 10px 0 10px ;
+}
+.loginText{
+    align-self: center;
+    margin-right: 20px;
+}
+.profileAuthData{
+    display: flex;
+    padding: 5px;
     align-items: center;
-    padding: 0 15px;
 }
-
-.header img {
-    width: 50px;
+.label {
+    display: flex;
+    flex-direction: row;
 }
-
-.loginBlock {
-    float: right;
+.label:hover{
+    cursor: pointer;
 }
-
-.loginBlock a {
-    color: #5867dc;
-    font-weight: bold;
-    text-decoration: none;
+.btnLogout{
+    align-self: center;
 }
-
-.loginBlock a:hover {
-    text-decoration: underline;
+@media screen and (max-width: 720px) {
+    .header{
+        flex-direction: column;
+    }
+    .logoApp{
+        align-self: center;
+    }
+    .profileAuthData{
+        align-self: center;
+    }
+    .loginText{
+        margin: 0;
+    }
 }

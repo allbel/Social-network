@@ -1,23 +1,12 @@
-В этом стартовом проекте установлены следующие библиотеки:
+# Привет, друг!
 
-- **antd** 
-- **axios** 
-- **classnames**
-- **formik**
-- **gh-pages**
-- **jest**
-- **react** and **@types/react**
-- **react-dom** and **@types/react-dom**
-- **react-redux** and **@types/react-redux**
-- **react-router-dom** and **@types/react-router-dom**
-- **react-scripts** 
-- **react-test-renderer** and **@types/react-test-renderer**
-- **redux**
-- **redux-form** and **@types/redux-form**
-- **redux-thunk**
-- **reselect**
-- **typescript** 
-- **uuid** and **@types/uuid**
+# Это SocialNetwork, один из моих проектов, приятного просмотра
 
-<hr>
-To learn React, check out the [React documentation](https://reactjs.org/).
+Стек: React (Hooks, Redux, Class components), HTML, CSS(CSS Modules, Flex, Grid) , Webpack, Git, Ant Design, Axios, Formik, REST.
+Что сделал:
+
+• Реализовал возможность поиска пользователей с постраничным выводом нужного количества (Пагинацией) , подписки на выбранного, показ его профиля.
+
+• Реализовал возможность создания и редактирования собственного профиля, добавления фото, и различных полей.
+
+• Реализовал форму логинизации с валидацией.

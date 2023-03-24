@@ -1,20 +1,25 @@
-import React from 'react';
-import css from './Post.module.css';
-import {PostType} from "../../../../redux/profile-reducer";
+import classes from "./Post.module.css";
 
 
-type PostPropsType = PostType
+type PostTypeProps = {
+    id: string
+    text: String
+    likeCount: number
+    photoUser: string | undefined
+}
 
-function Post(props: PostPropsType) {
+function Post(props: PostTypeProps) {
     return (
-        <div className={css.item}>
-            <img src="https://cdn.fishki.net/upload/post/201505/08/1526580/0_8af37_3d6ed850_xxl.jpg" alt=""/>
-            {props.message}
-            <div>
-                <span>like: {props.likeCounts}</span>
+        <div>
+            <div className={classes.postItem}>
+                <div className={classes.authPhotoUserPostContainer}><img src={props.photoUser ? props.photoUser : ''}/></div>
+                <div className={classes.textPost}><span className={classes.post}>{props.text}</span>
+                    <span className={classes.like}>{props.likeCount}</span>
+                </div>
+
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Post;
+export default Post

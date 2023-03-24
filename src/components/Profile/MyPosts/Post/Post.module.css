@@ -1,7 +1,39 @@
-.item {
-    color: green;
+.postItem {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10px;
+    margin-top: 30px;
+
 }
 
-.item img {
-    width: 50px;
+.post {
+    margin: 10px;
+
+}
+
+.textPost {
+    align-self: center;
+}
+
+.postItem img {
+    width: 70px;
+    border-radius: 50%;
+}
+
+.like {
+    color: coral;
+}
+
+@media screen and (max-width: 720px) {
+    .postItem {
+        display: flex;
+        flex-direction: column;
+    }
+    .authPhotoUserPostContainer{
+        display: flex;
+        justify-content: center;
+    }
+    .textPost{
+        text-align: center;
+    }
 }

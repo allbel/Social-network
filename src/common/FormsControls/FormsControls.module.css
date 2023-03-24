@@ -1,0 +1,13 @@
+.formControl {
+    display: flex;
+}
+
+.error textarea {
+    border:solid 2px red;
+}
+
+.divError {
+    color: red;
+    font-weight: bold;
+    align-self: center;
+}

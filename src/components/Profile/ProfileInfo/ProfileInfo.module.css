@@ -1,11 +1,92 @@
-.descriptionBlock {
+.img {
+    margin: 10px 0 10px 0;
+    width: 150px;
+    height: 150px;
+}
+
+.profileInfo {
+    margin: 35px 15px 15px 15px;
+    max-width: 80%;
+}
+
+.mainInfoContainer {
+    border: 2px solid aqua;
+    border-radius: 10px;
     padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+
 }
 
-.mainPhoto {
-    max-width: 200px;
+.imgContainer {
+    align-self: center;
+    text-align: center;
 }
 
-.contact {
-    padding-left: 10px;
+.contactsContainer {
+    padding: 10px;
+    border: 2px solid aqua;
+    max-width: 100%;
+    border-radius: 10px;
 }
+
+.statusUser {
+    font-weight: bold;
+    font-size: 20px;
+    width: 200px;
+}
+.spanStatusUser{
+    color: lavender;
+    transition: 0.8s;
+}
+.spanStatusUser:hover{
+    cursor: pointer;
+    color: gold;
+    transition: 0.8s;
+}
+.contentProfileUser{
+    color: lavender;
+    transition: 0.8s;
+}
+.contentProfileUser:hover{
+    cursor: pointer;
+    color: gold;
+    transition: 0.8s;
+}
+.statusUser input {
+    width: 200px;
+    height: 30px;
+}
+.lookJob h4{
+    transition: 0.8s;
+}
+.lookJob h4:hover{
+    cursor: pointer;
+    color: #7cb305;
+    transition: 0.8s;
+}
+.spinAnt {
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    height: 100vh;
+}
+
+@media screen and (max-width: 720px) {
+    .mainInfoContainer {
+        justify-content: center;
+
+    }
+
+    .profileInfo {
+        max-width: 100%;
+    }
+
+    .buttonUploadPhoto {
+        max-width: 100%;
+        word-break: break-word;
+    }
+}
+

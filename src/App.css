@@ -1,23 +1,54 @@
+@import '~antd/dist/antd.css';
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+button {
+    color: black;
+    cursor: pointer;
+}
+
+input {
+    color: black;
+}
+
+.container {
+    color: aliceblue;
+    display: flex;
+    justify-content: center;
+    background-color: #386d6d;
+    min-height: 100vh
+}
+
 .app-wrapper {
-    display: grid;
-    grid-template-rows: 60px 1fr;
-    grid-template-columns: 2fr 10fr;
-    /*grid-gap: 10px;*/
-    grid-template-areas:
-    "header header"
-    "nav content";
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
 }
 
 .app-wrapper-content {
-    grid-area: content;
-    background-color: #ffc;
-    min-height: calc(100vh - 60px);
+    display: flex;
 }
 
-.formSummaryError {
-    border: 2px solid red;
-    padding: 5px;
-    color: red;
+.app-main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.alert {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+}
+
+@media screen and (max-width: 720px) {
+    .app-wrapper-content {
+        flex-direction: column;
+    }
+    .app-wrapper{
+        width: 80%;
+    }
 }

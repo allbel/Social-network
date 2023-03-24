@@ -1,106 +1,63 @@
 import React from 'react';
 import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import {Input} from "../common/FormsControls/FormsControls";
-import {required} from "../../utils/validators/validators";
 import {connect} from "react-redux";
-import {CaptchaUrlType, EmailType, login} from "../../redux/auth-reducer";
+import {loginUserThunkCreator} from "../../redux/authReducer";
+import {Input} from "../../common/FormsControls/FormsControls";
+import {requaredField} from "../../utils/validators/validators";
 import {Redirect} from "react-router-dom";
-import {StateType} from "../../redux/redux-store";
+import {StateType} from "../../redux/reduxStore";
+import classes from './Login.module.css'
 
-type FormDataType = {
-    email: string
-    password: string
-    rememberMe: boolean
-    captcha: string
+export type FormDataTypeLogin = {
+    login:string
+    password:string
+    rememberMe:boolean
 }
-
-type LoginReduxFormPropsType = {
-    captchaUrl: CaptchaUrlType
-}
-
-const LoginForm: React.FC<InjectedFormProps<FormDataType, LoginReduxFormPropsType> & LoginReduxFormPropsType> =
-    ({
-         handleSubmit, error, captchaUrl
-     }) => {
-        return (
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <Field component={Input}
-                           name={'email'}
-                           placeholder={'email'}
-                           validate={[required]}
-                    />
-                </div>
-                <div>
-                    <Field component={Input}
-                           name={'password'}
-                           type={'password'}
-                           placeholder={'Password'}
-                           validate={[required]}
-                    />
-                </div>
-                <div>
-                    <Field component={Input}
-                           name={'rememberMe'}
-                           type={'checkbox'}
-                    /> remember me
-                </div>
-                {captchaUrl &&
-                  <div>
-                    <img src={captchaUrl} alt="captcha"/>
-                    <Field component={Input}
-                           name={'captcha'}
-                           placeholder={'Symbols from image'}
-                           validate={[required]}
-                    />
-                  </div>}
-                {error && <div className={'formSummaryError'}>{error}</div>}
-                <div>
-                    <button style={{cursor: 'pointer'}}>Login</button>
-                </div>
-            </form>
-        );
-    };
-
-const LoginReduxForm = reduxForm<FormDataType, LoginReduxFormPropsType>({form: 'login'})(LoginForm)
-
-type LoginPropsType = MapSateToPropsType & MapDispatchToPropsType
-
-const Login = (props: LoginPropsType) => {
-
-    const onSubmit = (formData: FormDataType) => {
-        props.login(formData.email, formData.password, formData.rememberMe, formData.captcha)
-    }
-
-    if (props.isAuth) {
-        return <Redirect to={'/profile'}/>
-    }
-
+export const LoginForm = (props:InjectedFormProps<FormDataTypeLogin>) => {
     return (
-        <div style={{ padding: '0 0 20px 20px' }}>
+
+        <form onSubmit={props.handleSubmit}>
+            <div><Field name={'email'}  type="text" placeholder={'email'} component={Input} validate={[requaredField]}/></div>
+            <div><Field name={'password'} type="password" placeholder={'password'} component={Input} validate={[requaredField]}/></div>
+            <div><Field name={'rememberMe'} type="checkbox" component={Input} validate={[requaredField]}/> remember me</div>
+            {props.error && <div className={classes.errorSubmit}>{props.error}</div>}
+            <div><button>Login</button></div>
+        </form>
+
+    )
+}
+
+const LoginFormContainer = reduxForm<FormDataTypeLogin>({
+    // a unique name for the form
+    form: 'login'
+})(LoginForm)
+
+
+const Login = (props:LoginPropsType) => {
+
+    const onSubmit = (formData:FormDataTypeLogin) => {
+        props.AuthorizeUserThunkCreator(formData)
+    }
+    if(props.isAuth){
+        return <Redirect to={'profile/'}/>
+    }
+    return (
+        <div>
             <h1>Login</h1>
-            <div>
-                <p>To log in use common test account credentials:</p>
-                <p><b>Email</b>: free@samuraijs.com</p>
-                <p><b>Password</b>: free</p>
-            </div>
-            <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl}/>
+            <LoginFormContainer onSubmit={onSubmit}/>
         </div>
     );
 };
-
-type MapSateToPropsType = {
-    captchaUrl: CaptchaUrlType
-    isAuth: boolean
+type mapStateToPropsType = {
+    isAuth:boolean
 }
-
-type MapDispatchToPropsType = {
-    login: (email: EmailType, password: string, rememberMe: boolean, captcha: CaptchaUrlType) => void
+type mapDispatchToPropsType = {
+    AuthorizeUserThunkCreator:(dataForm:FormDataTypeLogin)=>void
 }
-
-const mapSateToProps = (state: StateType) => ({
-    captchaUrl: state.auth.captchaUrl,
-    isAuth: state.auth.isAuth
-})
-
-export default connect(mapSateToProps, {login})(Login);
+type LoginPropsType = mapStateToPropsType & mapDispatchToPropsType
+const mapStateToProps = (state:StateType):mapStateToPropsType => {
+    return {
+     isAuth:state.auth.isAuth
+    }
+}
+export default connect(mapStateToProps,{AuthorizeUserThunkCreator: loginUserThunkCreator})(Login)

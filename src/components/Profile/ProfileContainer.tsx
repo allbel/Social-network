@@ -1,96 +1,105 @@
-import React from 'react';
+import React from "react";
 import Profile from "./Profile";
 import {connect} from "react-redux";
-import {StateType} from "../../redux/redux-store";
 import {
-    getStatusProfile,
-    getUserProfile,
-    ProfileType,
-    savePhoto, saveProfile,
-    updateStatusProfile
-} from "../../redux/profile-reducer";
+    getStatusThunkCreator,
+    ProfileUserType,
+    setProfileThunkCreator,
+    termModelUpdateProfile,
+    updateProfileThunkCreator,
+    updateStatusThunkCreator,
+    uploadPhotoThunkCreator
+} from "../../redux/ProfileReducer";
+import {StateType} from "../../redux/reduxStore";
 import {RouteComponentProps, withRouter} from "react-router-dom";
+import {WithAuthRedirect} from "../../hoc/withAuthRedirect";
 import {compose} from "redux";
-import {IdType} from "../../redux/auth-reducer";
-import {withAuthRedirect} from "../../hoc/withAuthRedirect";
 
 
-class ProfileContainer extends React.Component<ProfileContainerPropsType>{
+export type BookDetailProps = RouteComponentProps<WithRouteType>;
+export type WithRouteType = {
+    userId: string
+}
+export type mapStateToPropsType = {
+    authUserId: number | null
+    profile: ProfileUserType | null
+    isLoading: boolean
+    status: string
+}
+export type mapDispatchToPropsType = {
+    setProfileThunkCreator: (params: string) => void
+    getStatusThunkCreator: (id: string) => void
+    updateStatusThunkCreator: () => void
+    uploadPhotoThunkCreator: (file: any) => void
+    updateProfileThunkCreator: (value: termModelUpdateProfile) => void
+}
 
-    refreshProfile() {
-        let userId: string | IdType = this.props.match.params.userId
-        if (!userId) {
-            userId = this.props.authUserId
-            if (!userId) {
-                this.props.history.push("/login")
-            }
-        }
-        this.props.getUserProfile(String(userId))
-        this.props.getStatusProfile(String(userId))
-    }
+export type ProfileContainerApiType = mapStateToPropsType & mapDispatchToPropsType & BookDetailProps
 
+
+class ProfileContainerApi extends React.Component<ProfileContainerApiType, StateType> {
     componentDidMount() {
-        this.refreshProfile();
+        let userId = this.props.match.params.userId
+        if (!userId && this.props.authUserId) {
+            userId = String(this.props.authUserId)
+        }
+        this.props.setProfileThunkCreator(userId)
+        this.props.getStatusThunkCreator(userId)
     }
 
-    componentDidUpdate(prevProps: Readonly<ProfileContainerPropsType>, prevState: Readonly<{}>) {
-        if (this.props.match.params.userId != prevProps.match.params.userId) {
-            this.refreshProfile();
+    componentDidUpdate(prevProps: Readonly<ProfileContainerApiType>, prevState: Readonly<StateType>, snapshot?: any) {
+        let userId = this.props.match.params.userId
+        if (this.props.profile !== null) {
+            document.title = this.props.profile.fullName
         }
+        if (prevProps.match.params.userId !== this.props.match.params.userId && this.props.match.params.userId) {
+            this.props.setProfileThunkCreator(this.props.match.params.userId)
+            this.props.getStatusThunkCreator(this.props.match.params.userId)
+        }
+    }
+
+    componentWillUnmount() {
+        document.title = 'Social network'
     }
 
     render() {
-        return (
-            <Profile {...this.props}
-                     isOwner={!this.props.match.params.userId}
-                     status={this.props.status}
-                     updateStatusProfile={this.props.updateStatusProfile}
-                     savePhoto={this.props.savePhoto}
+        return <div>
+            <Profile
+                updateProfileThunkCreator={this.props.updateProfileThunkCreator}
+                authUserId={this.props.authUserId}
+                profile={this.props.profile!}
+                isLoading={this.props.isLoading}
+                status={this.props.status}
+                updateStatusThunkCreator={this.props.updateStatusThunkCreator}
+                userId={this.props.match.params.userId}
+                uploadPhotoThunkCreator={this.props.uploadPhotoThunkCreator}
+
             />
-        );
+
+        </div>
     }
-};
 
-type MapStateProfileContainerPropsType = {
-    profile: ProfileType
-    status: string
-    authUserId: string
-    isAuth: boolean
+
 }
 
-type MapDispatchProfileContainerPropsType = {
-    getUserProfile: (userId: string) => void
-    getStatusProfile: (userId: string) => void
-    updateStatusProfile: (status: string) => void
-    savePhoto: (file: any) => void
-    saveProfile: (profile: ProfileType) => Promise<any>
-}
-
-type PathParamsType = {
-    userId: string
-}
-
-type ProfileContainerConnectPropsType =
-    MapStateProfileContainerPropsType & MapDispatchProfileContainerPropsType
-
-export type ProfileContainerPropsType =
-    RouteComponentProps<PathParamsType> & ProfileContainerConnectPropsType
-
-const mapStateToProps = (state: StateType): MapStateProfileContainerPropsType => ({
-    profile: state.profilePage.profile,
-    status: state.profilePage.status,
+const mapStateToProps = (state: StateType): mapStateToPropsType => ({
     authUserId: state.auth.id,
-    isAuth: state.auth.isAuth,
+    profile: state.profilePage.profileUser,
+    isLoading: state.profilePage.isLoading,
+    status: state.profilePage.statusUser,
 })
 
 export default compose<React.ComponentType>(
     connect(mapStateToProps, {
-        getUserProfile,
-        getStatusProfile,
-        updateStatusProfile,
-        savePhoto,
-        saveProfile,
+        setProfileThunkCreator,
+        getStatusThunkCreator,
+        updateStatusThunkCreator,
+        uploadPhotoThunkCreator,
+        updateProfileThunkCreator
     }),
     withRouter,
-    withAuthRedirect,
-)(ProfileContainer)
+    WithAuthRedirect
+)(ProfileContainerApi)
+
+
+

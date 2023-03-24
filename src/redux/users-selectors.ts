@@ -1,25 +1,23 @@
-import {StateType} from "./redux-store";
+import {StateType} from "./reduxStore";
 
 export const getUsers = (state: StateType) => {
-    return state.usersPage.users
+    return state.userPage.users
 }
-
-export const getPageSize = (state: StateType) => {
-    return state.usersPage.pageSize
+export const currentPage = (state: StateType) => {
+    return state.userPage.currentPage
 }
-
-export const getTotalUsersCount = (state: StateType) => {
-    return state.usersPage.totalUsersCount
+export const pageSizeUsers = (state: StateType) => {
+    return state.userPage.pageSizeUsers
 }
-
-export const getCurrentPage = (state: StateType) => {
-    return state.usersPage.currentPage
+export const totalCountPages = (state: StateType) => {
+    return state.userPage.totalUserCount
 }
-
-export const getIsFetching = (state: StateType) => {
-    return state.usersPage.isFetching
+export const isLoading = (state: StateType) => {
+    return state.userPage.isLoading
 }
-
-export const getFollowingInProgress = (state: StateType) => {
-    return state.usersPage.followingInProgress
+export const isLoadingFollowUnFollow = (state: StateType) => {
+    return state.userPage.isLoadingFollowUnFollow
+}
+export const arrayUsersIdForDisabledButton = (state: StateType) => {
+    return state.userPage.arrayUsersIdForDisabledButton
 }

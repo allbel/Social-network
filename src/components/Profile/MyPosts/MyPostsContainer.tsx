@@ -1,35 +1,33 @@
-import React from 'react';
-import {addPostAC, PostType} from "../../../redux/profile-reducer";
-import MyPosts from "./MyPosts";
-import {StateType} from "../../../redux/redux-store";
+import React from "react";
 import {connect} from "react-redux";
-import {Dispatch} from "redux";
+import {DispatchType, StateType} from "../../../redux/reduxStore";
+import {postDataType, setAddPost} from "../../../redux/ProfileReducer";
+import {MyPosts} from "./MyPosts";
 
 
-type MapStateProfilePropsType = {
-    posts: Array<PostType>
+export type mapStateToPropsType = {
+    posts:Array<postDataType>
+    photoUser: string | undefined
+}
+export type mapDispatchToProps = {
+    addPost:(post:string)=> void
 }
 
-type MapDispatchProfilePropsType = {
-    addPost: (text: string) => void
-}
-
-export type MyPostsPropsType = MapStateProfilePropsType & MapDispatchProfilePropsType
-
-const mapStateToProps = (state: StateType): MapStateProfilePropsType => {
+const mapStateToProps = (state: StateType):mapStateToPropsType => {
     return {
-        posts: state.profilePage.posts
+        posts: state.profilePage.postData,
+        photoUser: state.profilePage.profileUser?.photos.large
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch): MapDispatchProfilePropsType => {
+const mapDispatchToProps = (dispatch: DispatchType):mapDispatchToProps => {
     return {
-        addPost: (text: string) => {
-            dispatch(addPostAC(text))
-        }
+        addPost: (post:string) => dispatch(setAddPost(post))
     }
 }
 
-const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts)
 
-export default MyPostsContainer;
+
+export const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts)
+
+

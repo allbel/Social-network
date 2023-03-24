@@ -1,89 +1,152 @@
-import React, {ChangeEvent, useState} from 'react';
-import css from './ProfileInfo.module.css';
-import {ProfileType} from "../../../redux/profile-reducer";
-import Preloader from "../../common/Preloader/Preloader";
-import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
-import userPhoto from "../../../assets/images/user.jpg"
-import {ProfileDataFormReduxForm} from "./ProfileDataForm";
+import classes from "./ProfileInfo.module.css";
+import {UploadOutlined} from '@ant-design/icons';
+import {ProfileUserType, termModelUpdateProfile} from "../../../redux/ProfileReducer";
+import avatarTemp from './../../../assets/images/user.png'
+import {StatusUser} from "./StatusUser/StatusUser";
+import {Button, Spin, Upload} from "antd";
+import {EditableSpan} from "../../EditableSpan/EditableSpan";
 
-type ProfileInfoType = {
-    profile: ProfileType
+
+export type ProfileInfoTypeProps = {
+    isAuthUser: boolean
+    authUserId: number | null
+    profile: ProfileUserType
+    isLoading: boolean
     status: string
-    updateStatusProfile: (status: string) => void
-    isOwner: boolean
-    savePhoto: (file: any) => void
-    saveProfile: (profile: ProfileType) => Promise<any>
+    updateStatusThunkCreator: (status: string) => void
+    userId: string
+    uploadPhotoThunkCreator: (file: any) => void
+    updateProfileThunkCreator: (value: termModelUpdateProfile, valueUpdateContacts: any) => void
+
 }
 
-const ProfileInfo = ({profile, status, updateStatusProfile, isOwner, savePhoto, saveProfile}: ProfileInfoType) => {
+function ProfileInfo(props: ProfileInfoTypeProps) {
 
-    const [editMode, setEditMode] = useState(false)
 
-    if (!profile) {
-        return <Preloader/>
+    const nameUser = props.profile?.fullName.toLowerCase().split(' ').map(el => el[0].toUpperCase() + el.slice(1)).join(' ')
+
+    const changeAboutMy = (title: string) => {
+        props.updateProfileThunkCreator({aboutMe: title}, null)
+    }
+    const changeNameHandler = (title: string) => {
+        props.updateProfileThunkCreator({fullName: title}, null)
+    }
+    const ChangeLookingForAJobHandler = () => {
+        props.updateProfileThunkCreator({lookingForAJob: !props.profile.lookingForAJob}, null)
     }
 
-    const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files?.length) {
-            savePhoto(e.target.files[0])
-        }
+    const uploadFileHandler = (file: any) => {
+        props.uploadPhotoThunkCreator(file.file.originFileObj)
     }
 
-    const onSubmit = (formData: ProfileType) => {
-        saveProfile(formData)
-            .then(() => setEditMode(false))
+    if (!props.profile || props.isLoading) {
+        return <div className={classes.spinAnt}><Spin  size={"large"}/></div>
+    }
+
+
+    const lookingForAJobDescriptionChanger = (title: string) => {
+        props.updateProfileThunkCreator({lookingForAJobDescription: title}, null)
+    }
+    const changeContactsHandler = (keyObj: string, title: string) => {
+        props.updateProfileThunkCreator({}, {[keyObj]: title})
     }
 
     return (
-        <div>
-            <div className={css.descriptionBlock}>
-                <ProfileStatusWithHooks
-                    status={status}
-                    updateStatusProfile={updateStatusProfile}/>
-                <img src={profile.photos?.large || userPhoto} className={css.mainPhoto}/>
-                {isOwner && <input type={"file"} onChange={onMainPhotoSelected}/>}
-                {editMode
-                    ? <ProfileDataFormReduxForm initialValues={profile} profile={profile} onSubmit={onSubmit} />
-                    : <ProfileData profile={profile} isOwner={isOwner} goToEditMode={() => setEditMode(true)} /> }
-            </div>
-        </div>
-    );
-};
+        <div className={classes.profileInfo}>
+            <div className={classes.mainInfoContainer}>
+                <div className={classes.imgContainer}>
+                    <img className={classes.img}
+                         src={props.profile.photos.large ? props.profile.photos.large : avatarTemp}
+                         alt={'avatar'}/>
+                    <div>
+                        {props.isAuthUser && props.authUserId &&
+                            <Upload showUploadList={false} onChange={uploadFileHandler}>
+                                <Button className={classes.buttonUploadPhoto} icon={<UploadOutlined/>}>Upload
+                                    photo</Button>
+                            </Upload>}
+                        <StatusUser
+                            isAuthUser={props.isAuthUser}
+                            status={props.status}
+                            updateStatusThunkCreator={props.updateStatusThunkCreator}
+                            userId={props.userId}/>
+                    </div>
+                </div>
+                <div className={classes.nameContainer}>
+                    <div>
+                        <h3>
+                            <EditableSpan forContacts={false} title={nameUser} disable={!props.isAuthUser}
+                                          changeTitle={changeNameHandler}/>
+                        </h3>
+                    </div>
+                    <hr/>
+                    <div>
+                        <h4>About me:{
+                                props.profile.aboutMe ?
+                                    <EditableSpan
+                                        forContacts={false}
+                                        title={props.profile.aboutMe!}
+                                        changeTitle={changeAboutMy}
+                                        disable={!props.isAuthUser}/>
+                                    : '---'
+                        }
+                        </h4>
+                    </div>
+                    <hr/>
 
-type KeyContactsType = 'facebook' | 'website' | 'vk' | 'twitter' | 'instagram' | 'youtube' | 'github' | 'mainLink'
-
-const ProfileData = ({profile, isOwner, goToEditMode}: {profile: ProfileType; isOwner: boolean; goToEditMode: () => void}) => {
-    return (
-        <div>
-            {isOwner && <div><button onClick={goToEditMode}>Edit</button></div>}
-            <div>
-                <b>Full name</b>: {profile.fullName}
+                    <div
+                        onClick={props.isAuthUser ? ChangeLookingForAJobHandler : () => {
+                        }}>{props.profile.lookingForAJob
+                        ?
+                        <h4 className={props.isAuthUser ? classes.contentProfileUser : ''}>looking for a job</h4>
+                        :
+                        <h4 className={props.isAuthUser ? classes.contentProfileUser : ''}>not looking for a job</h4>}
+                    </div>
+                </div>
             </div>
-            <div>
-                <b>Looking for a job</b>: {profile.lookingForAJob ? 'yes' : 'no'}
-            </div>
-            { profile.lookingForAJob &&
-              <div>
-                <b>My professional skills</b>: {profile.lookingForAJobDescription}
-              </div>
-            }
-            <div>
-                <b>About me</b>: {profile.aboutMe}
-            </div>
-            <div>
-                <b>Contacts</b>: {profile.contacts && Object.keys(profile.contacts).map(key => {
-                return <Contact key={key}
-                                contactTitle={key}
-                                contactValue={profile.contacts[key as KeyContactsType]}
-                />
-            })}
+            <div className={classes.contactsContainer}>
+                <div>
+                    <h3>looking for a job
+                        description: {props.profile.lookingForAJobDescription ?
+                            <EditableSpan forContacts={false} title={props.profile.lookingForAJobDescription}
+                                          changeTitle={lookingForAJobDescriptionChanger} disable={!props.isAuthUser}/> :
+                            <span>---</span>}</h3>
+                </div>
+                <hr/>
+                <h3>Contacts:</h3>
+                <div>
+                    <h4>website: <EditableSpan forContacts={true}
+                                               title={props.profile.contacts.website!}
+                                               changeTitle={(title) => changeContactsHandler('website', title)}
+                                               disable={!props.isAuthUser}/></h4>
+                    <h4>vk: <EditableSpan forContacts={true}
+                                          title={props.profile.contacts.vk!}
+                                          changeTitle={(title) => changeContactsHandler('vk', title)}
+                                          disable={!props.isAuthUser}/></h4>
+                    <h4>youtube: <EditableSpan forContacts={true}
+                                               title={props.profile.contacts.youtube!}
+                                               changeTitle={(title) => changeContactsHandler('youtube', title)}
+                                               disable={!props.isAuthUser}/></h4>
+                    <h4>twitter: <EditableSpan forContacts={true}
+                                               title={props.profile.contacts.twitter!}
+                                               changeTitle={(title) => changeContactsHandler('twitter', title)}
+                                               disable={!props.isAuthUser}/></h4>
+                    <h4>instagram: <EditableSpan forContacts={true}
+                                                 title={props.profile.contacts.instagram!}
+                                                 changeTitle={(title) => changeContactsHandler('instagram', title)}
+                                                 disable={!props.isAuthUser}/></h4>
+                    <h4>github: <EditableSpan forContacts={true}
+                                              title={props.profile.contacts.github!}
+                                              changeTitle={(title) => changeContactsHandler('github', title)}
+                                              disable={!props.isAuthUser}/></h4>
+                    <h4>facebook: <EditableSpan forContacts={true}
+                                                title={props.profile.contacts.facebook!}
+                                                changeTitle={(title) => changeContactsHandler('facebook', title)}
+                                                disable={!props.isAuthUser}/></h4>
+                </div>
             </div>
         </div>
     )
 }
 
-const Contact = ({contactTitle, contactValue}: {contactTitle: string, contactValue: string | null}) => {
-    return <div className={css.contact}><b>{contactTitle}</b>: {contactValue}</div>
-}
+export default ProfileInfo
 
-export default ProfileInfo;

@@ -1,87 +1,90 @@
-import React, {Suspense} from 'react';
+import React from 'react';
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
-import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
-import News from "./components/News/News";
-import Music from "./components/Music/Music";
-import Settings from './components/Settings/Settings';
-import UsersContainer from "./components/Users/UsersContainer";
-import HeaderContainer from "./components/Header/HeaderContainer";
-import Login from "./components/Login/Login";
-import {connect} from "react-redux";
+import {Redirect, Route, withRouter} from "react-router-dom";
 import {compose} from "redux";
-import {initializeApp} from "./redux/app-reducer";
-import {StateType} from "./redux/redux-store";
-import Preloader from "./components/common/Preloader/Preloader";
-import {withSuspense} from "./hoc/withSuspense";
+import DialogsComposeComponent from './components/Dialogs/DialogsContainer'
+import {UsersContainer} from './components/Users/UsersContainer'
+import HeaderContainerApi from "./components/Header/HeaderContainerApi";
+import ProfileComposeComponent from './components/Profile/ProfileContainer'
+import {connect} from "react-redux";
+import {initializationMeThunkCreator} from "./redux/appReducer";
+import {StateType} from "./redux/reduxStore";
+import Login2 from "./components/Login/LoginAntDesign";
+import {Alert, Spin} from "antd";
+import {Friends} from "./components/Friends/Friends";
+import {Chat} from "./components/Chat/Chat";
+import { News } from './components/News/News';
 
-// import DialogsContainer from "./components/Dialogs/DialogsContainer";
-// import ProfileContainer from "./components/Profile/ProfileContainer";
-const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
-const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
-
+type AppPropsType = mapDispatchToPropsType & mapStateToPropsType
 
 class App extends React.Component<AppPropsType> {
-    catchAllUnhandledErrors = (promiseRejectionEvent: PromiseRejectionEvent) => {
-        // alert("promiseRejectionEvent")
-    }
-
     componentDidMount() {
-        this.props.initializeApp()
-        window.addEventListener('unhandledrejection', this.catchAllUnhandledErrors)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('unhandledrejection', this.catchAllUnhandledErrors)
+        this.props.initializationMeThunkCreator()
     }
 
     render() {
-        if (!this.props.initialized) {
-            return <Preloader/>
-        }
-
         return (
-            <div className='app-wrapper'>
-                <HeaderContainer/>
-                <Navbar/>
-                <div className='app-wrapper-content'>
-                    {/*<Switch>*/}
-                        <Route path='/'
-                               render={() => <Redirect to={'/login'}/>}/>
-                        <Route path='/dialogs'
-                               render={withSuspense(DialogsContainer)}/>
-                        <Route path='/profile/:userId?'
-                               render={withSuspense(ProfileContainer)}/>
-                        <Route path='/users'
-                               render={() => <UsersContainer/>}/>
-                        <Route path='/login'
-                               render={() => <Login/>}/>
-                        <Route path='/news' render={() => <News/>}/>
-                        <Route path='/music' render={() => <Music/>}/>
-                        <Route path='/settings' render={() => <Settings/>}/>
-                        {/*<Route path='*' render={() => <div>404 Not found</div>}/>*/}
-                    {/*</Switch>*/}
+            !this.props.initialValue ?
+                <Spin style={{display: 'flex', justifyContent: 'center', marginTop: '50px'}} size={"large"}/>
+                :
+                <div className='container'>
+                    <div className='app-wrapper'>
+                        <HeaderContainerApi/>
+                        <div className="app-wrapper-content">
+                            <Navbar/>
+                            <div className="app-main-content">
+                                <Route  path='/' render={() => <Redirect to={'/profile'}/>}/>
+                                <Route path='/login' render={() => <Login2/>}/>
+                                <Route path='/profile/:userId?' render={
+                                    () => <ProfileComposeComponent/>}/>
+                                <Route path='/dialogs/*' render={
+                                    () => <DialogsComposeComponent/>}/>
+                                <Route path='/chat/' render={
+                                    () => <Chat/>}/>
+                                <Route path='/users/*' render={
+                                    () => <UsersContainer isFriends={false}/>
+                                }/>
+                                <Route path='/friends/' render={()=>
+                                    <Friends/>
+                                }/>
+                                <Route path='/news/' render={()=> 
+                                    <News/>
+                                }/>
+
+                                {this.props.errorMessages && <Alert
+                                    style={{alignSelf: 'center'}}
+                                    description={this.props.errorMessages}
+                                    type="error"
+                                    showIcon
+                                    closable
+                                    className='alert'
+                                />}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
         );
     }
 }
 
-type AppPropsType = mapStateToPropsType & MapDispatchPropsType
-
 type mapStateToPropsType = {
-    initialized: boolean
+    initialValue: boolean
+    errorMessages:string | null
+}
+type mapDispatchToPropsType = {
+    initializationMeThunkCreator: () => void
 }
 
-const mapStateToProps = (state: StateType): mapStateToPropsType => ({
-    initialized: state.app.initialized,
-})
 
-type MapDispatchPropsType = {
-    initializeApp: () => void
+const mapStateToProps = (state: StateType): mapStateToPropsType => {
+    return {
+        initialValue: state.app.initializationValue,
+        errorMessages:state.auth.errorMessages
+    }
 }
 
-export default compose<React.FC>(
+export default compose<React.ComponentType>(
     withRouter,
-    connect(mapStateToProps, {initializeApp})
-)(App);
+    connect(mapStateToProps, {initializationMeThunkCreator}))
+(App);

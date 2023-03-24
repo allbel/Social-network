@@ -1,0 +1,27 @@
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.textTestAccount {
+    text-align: center;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+}
+
+.boltText {
+    color: #16bf16;
+    font-size: 17px;
+}
+
+@media screen and (max-width: 720px) {
+    .rememberMy {
+        justify-content: center
+    }
+    .content{
+        margin-top: 50px;
+    }
+}

@@ -1,19 +1,35 @@
-.nav {
-    grid-area: nav;
-    background-color: #EFF3F4;
-    padding: 20px;
+.navbar {
+    min-width: 150px;
+    background-color: #2c4141;
+    height: 307px;
+    margin: 34px 10px 0px 0px
+}
+
+.items {
+    margin: 30px;
+}
+
+
+.item {
+    padding: 2px;
 }
 
 .item a {
-    color: #5867dc;
+    font-size: 17px;
+    color: #ce7878;
     text-decoration: none;
 }
 
 .item a:hover {
-    text-decoration: underline;
+    transition: 1s;
+    color: lavender;
 }
 
-.item a.active {
-    color: green;
-    font-weight: bold;
+a.active {
+    color: gold;
+}
+@media screen and (max-width: 720px) {
+    .navbar{
+        margin: 5px 0 10px 0;
+    }
 }

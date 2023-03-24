@@ -1,30 +1,75 @@
-import React from 'react';
-import css from './Navbar.module.css';
+import classes from './Navbar.module.css'
 import {NavLink} from "react-router-dom";
 
-function Navbar() {
-    return (
-        <nav className={css.nav}>
-            <div className={css.item}>
-                <NavLink to="/profile" activeClassName={css.active}>Profile</NavLink>
-            </div>
-            <div className={css.item}>
-                <NavLink to="/dialogs" activeClassName={css.active}>Messages</NavLink>
-            </div>
-            <div className={css.item}>
-                <NavLink to="/users" activeClassName={css.active}>Users</NavLink>
-            </div>
-            <div className={css.item}>
-                <NavLink to="/news" activeClassName={css.active}>News</NavLink>
-            </div>
-            <div className={css.item}>
-                <NavLink to="/music" activeClassName={css.active}>Music</NavLink>
-            </div>
-            <div className={css.item}>
-                <NavLink to="/settings" activeClassName={css.active}>Settings</NavLink>
-            </div>
-        </nav>
-    );
-};
 
-export default Navbar;
+
+type NavbarPropsType = {
+
+}
+
+function Navbar(props: NavbarPropsType) {
+    return (<div className={classes.navbar}>
+        <div className={classes.items}>
+            <div className={classes.item}><NavLink className={isActive =>
+                 (isActive ? classes.active : "")
+            } to="/profile/">Profile</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to="/dialogs/">Message</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to="/friends/">Friends</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to={'/users/'}>Users</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to={'/chat/'}>Chat</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to="/news/">News</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to="/music/">Music</NavLink></div>
+
+            <div className={classes.item}><NavLink className={isActive =>
+                (isActive ? classes.active : "")
+            } to="/settings/">Settings</NavLink></div>
+
+        </div>
+        {/*<div className={classes.friends}>*/}
+        {/*    {props.state.sidebar.friendsData.map(el => {*/}
+        {/*        return (*/}
+        {/*            <div key={el.id} className={classes.friend}>*/}
+        {/*                <div><img src={"https://cs6.pikabu.ru/avatars/1121/x1121129-2144512139.png"}/></div>*/}
+        {/*                <NavLink className={isActive =>*/}
+        {/*                    (isActive ? classes.active : "")*/}
+        {/*                } to={"/friend/" + el.id}>{el.name}</NavLink></div>*/}
+        {/*        )*/}
+        {/*    })}*/}
+        {/*</div>*/}
+    </div>)
+}
+
+
+export default Navbar
+
+
+// <div className={classes.friend}><NavLink className={({ isActive }) =>
+// isActive ? classes.active : undefined
+// } to={"/friend/" + }>Igor</NavLink></div>
+// <div className={classes.friend}><NavLink className={({ isActive }) =>
+// isActive ? classes.active : undefined
+// } to="/friend/">Sveta</NavLink></div>
+// <div className={classes.friend}><NavLink className={({ isActive }) =>
+// isActive ? classes.active : undefined
+// } to="/friend/">Sasha</NavLink></div>
+// <div className={classes.friend}><NavLink className={({ isActive }) =>
+// isActive ? classes.active : undefined
+// } to="/friend/">Max</NavLink></div>

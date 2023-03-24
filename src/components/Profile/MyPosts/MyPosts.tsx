@@ -1,57 +1,61 @@
-import React from 'react';
-import css from './MyPosts.module.css';
+import classes from "./MyPosts.module.css";
 import Post from "./Post/Post";
-import {MyPostsPropsType} from "./MyPostsContainer";
-import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import {maxLengthCreator, required} from "../../../utils/validators/validators";
-import {Textarea} from "../../common/FormsControls/FormsControls";
+import React, {ChangeEvent, RefAttributes, useState} from "react";
+import {Button} from "antd";
+import TextArea, {TextAreaRef}  from "antd/es/input/TextArea";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../../redux/reduxStore";
+import {setAddPost} from "../../../redux/ProfileReducer";
+import {TextAreaProps} from "antd/lib/input";
 
 
-type FormDataType = {
-    newPostText: string
+type MyPostsTypeProps = {
+    photoUser: string | undefined
 }
 
-const maxLength10 = maxLengthCreator(10)
+export const MyPosts = (props: MyPostsTypeProps) => {
 
-const AddNewPostForm: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+    const posts = useAppSelector(state => state.profilePage.postData)
+
+    const addNewPostPage = posts.map(p =>
+        <Post photoUser={props.photoUser} id={p.id} key={p.id} text={p.text} likeCount={p.likeCount}/>)
+
     return (
-        <form onSubmit={props.handleSubmit}>
+        <div className={classes.Posts}>
             <div>
-                <Field component={Textarea} name={'newPostText'} placeholder={'Enter your post'}
-                       validate={[required, maxLength10]}
-                />
+                <TextAreaFormPost/>
             </div>
-            <div>
-                <button>Add post</button>
-            </div>
-        </form>
+            {addNewPostPage}
+        </div>)
+}
+
+
+const TextAreaFormPost = () => {
+
+    const [options, setOptions] = useState('');
+
+    const dispatch = useDispatch()
+
+    const handleKeyPress = (e:ChangeEvent<HTMLTextAreaElement>) => {
+        setOptions(e.currentTarget.value)
+    };
+
+    const setPostHandler = () => {
+        dispatch(setAddPost(options))
+        setOptions('')
+    }
+
+
+    return (
+        <div className={classes.containerTextAreaBtn}>
+            <TextArea
+                value={options}
+                placeholder="input here"
+                onChange={handleKeyPress}
+            />
+            <Button onClick={setPostHandler} type="primary" size={"middle"}>Add Post</Button>
+        </div>
     )
 }
 
-const AddNewPostFormRedux = reduxForm<FormDataType>({form: "profileAddNewPostForm"})(AddNewPostForm)
 
-function MyPosts(props: MyPostsPropsType) {
-
-    let postsElements = props.posts.map(p =>
-        <Post
-            key={p.id}
-            id={p.id}
-            message={p.message}
-            likeCounts={p.likeCounts}/>)
-
-    const onAddPost = (values: FormDataType) => {
-        props.addPost(values.newPostText)
-    }
-
-    return (
-        <div className={css.postsBlock}>
-            <h3>My posts</h3>
-            <AddNewPostFormRedux onSubmit={onAddPost}/>
-            <div className={css.posts}>
-                {postsElements}
-            </div>
-        </div>
-    );
-};
-
-export default MyPosts;

@@ -1,21 +1,50 @@
-import React from 'react';
-import css from './Header.module.css';
-import {NavLink} from "react-router-dom";
-import {HeaderContainerPropsType} from "./HeaderContainer";
+import classes from './Header.module.css'
+import {Link, NavLink} from "react-router-dom";
+import {ProfileUserType} from "../../redux/ProfileReducer";
+import Logo from './../../assets/images/Logo.png'
 
-type HeaderPropsType = HeaderContainerPropsType
 
-function Header(props: HeaderPropsType) {
-    return (
-        <header className={css.header}>
-            <img src="https://i.pinimg.com/originals/23/80/0b/23800b995292379883a15d9a4c382b22.png" alt=""/>
-            <div className={css.loginBlock}>
-                {props.isAuth
-                    ? <div>{props.login} - <button onClick={props.logout}>Logout</button></div>
-                    : <NavLink to={'/login'}>Login</NavLink>}
+type headerTypeProps = {
+    isAuth: boolean
+    login: string | null
+    profile: ProfileUserType | null
+    loginOutUserThunkCreator: () => void
+    logoAuthUser: string | null
+    idAuthUser: number | null
+}
+
+function Header(props: headerTypeProps) {
+
+    const onClickHandlerLogOut = () => {
+        props.loginOutUserThunkCreator()
+    }
+
+    // const onClickHandlerAuthUser = () => {
+    //     // console.log('1');
+    //     // return <Redirect to={'/'}/>
+    //   location.href  = 'profile/'
+    // }
+
+    return (<div className={classes.header}>
+        <img className={classes.logoApp} src={Logo} alt={'Logo'}/>
+        {props.isAuth ?
+            <div className={classes.profileAuthData}>
+                <Link to={`/profile/${props.idAuthUser}`}>
+                    <label className={classes.label}>
+                        {/*<img className={classes.smallLogoAvatar} src={props.logoAuthUser!} alt="Photo"/>*/}
+                        <div className={classes.loginText}>{props.login}</div>
+                    </label>
+                </Link>
+                <div className={classes.btnLogout}>
+                    <button onClick={onClickHandlerLogOut}>Log out</button>
+
+                </div>
             </div>
-        </header>
-    );
-};
+            :
+            <NavLink className={classes.loginText} to={'/login'}>Login</NavLink>}
+    </div>)
 
-export default Header;
+}
+
+
+export default Header

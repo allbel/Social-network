@@ -1,7 +1,16 @@
-.posts {
-    margin-top: 10px;
+.Posts {
+    padding: 20px;
 }
 
-.postsBlock {
-    padding: 10px;
+.containerTextAreaBtn{
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+}
+
+@media screen and (max-width: 720px) {
+    .formAddPost {
+        display: flex;
+        flex-direction: column;
+    }
 }

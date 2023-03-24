@@ -1,58 +1,29 @@
-import React from 'react';
-import css from './Dialogs.module.css';
-import DialogItem from "./DialogItem/DialogItem";
-import Message from "./Message/Message";
-import {DialogsPropsType} from "./DialogsContainer";
-import {Field, InjectedFormProps, reduxForm} from "redux-form";
-import {maxLengthCreator, required} from "../../utils/validators/validators";
-import {Textarea} from "../common/FormsControls/FormsControls";
+import React from 'react'
+import Message from './Message/Message'
+import MessageSender from './Message-sender/MessageSender'
+import s from './Dialogs.module.css'
+import {useSelector} from "react-redux";
+import {StateType} from "../../redux/reduxStore";
+import {dialogsDataType} from "../../redux/DialogsReducer";
 
-type FormDataType = {
-    newMessageText: string
-}
 
-const maxLength50 = maxLengthCreator(50)
+export const Dialogs = () => {
 
-const AddMessageFrom: React.FC<InjectedFormProps<FormDataType>> = (props) => {
+    const arrayMessage = useSelector<StateType,Array<dialogsDataType>>(state=> state.dialogPage.dialogsData)
+
+
+
+
     return (
-        <form onSubmit={props.handleSubmit}>
-            <div>
-                <Field component={Textarea} name={'newMessageText'} placeholder={'Enter your message'}
-                       validate={[required, maxLength50]}
-                />
+        <div  className={s.mainContainer}>
+            <div >
+                <div className={s.messagesContainer}>
+                    <Message message={arrayMessage} />
+                </div>
+                <MessageSender />
             </div>
-            <div>
-                <button>Add</button>
-            </div>
-        </form>
+        </div>
     )
 }
 
-const AddMessageFromRedux = reduxForm<FormDataType>({form: "dialogAddMessageFrom"})(AddMessageFrom)
-
-const Dialogs = (props: DialogsPropsType) => {
-
-    let state = props.dialogsPage
-
-    let dialogsElements = state.dialogs.map(d => <DialogItem key={d.id} id={d.id} name={d.name}/>)
-    let messagesElements = state.messages.map(m => <Message key={m.id} id={m.id} message={m.message}/>)
-
-    const addMessage = (values: FormDataType) => {
-        props.addMessage(values.newMessageText)
-    }
-
-    return (
-        <div className={css.dialogs}>
-            <div className={css.dialogsItems}>
-                {dialogsElements}
-            </div>
-            <div className={css.messages}>
-                <div>{messagesElements}</div>
-                <AddMessageFromRedux onSubmit={addMessage}/>
-            </div>
-        </div>
-    );
-};
-
-
-export default Dialogs;
+export default Dialogs

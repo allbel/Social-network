@@ -1,49 +1,50 @@
 import React from 'react';
-import {followingInProgressType, UserType} from "../../redux/users-reducer";
-import Paginator from "../common/Paginator/Paginator";
-import User from "./User";
+import s from "./Users.module.css";
+import {User} from "./User/User";
+import {PaginationComponent} from "../../common/Pagination";
+import {useSelector} from "react-redux";
+import {StateType} from "../../redux/reduxStore";
+import {UserType} from "../../redux/UsersReducer";
 
-type UsersDataPropsType = {
-    users: Array<UserType>
-    pageSize: number
-    totalUsersCount: number
-    currentPage: number
-    followingInProgress: followingInProgressType
-}
 
-type UsersCallbackPropsType = {
-    onPageChanged: (currentPage: number) => void
-    follow: (userID: number) => void
-    unfollow: (userID: number) => void
-}
+export const Users = (props:{friendsMode:boolean | null}) => {
 
-type UsersPropsType = UsersDataPropsType & UsersCallbackPropsType
+    const users  = useSelector<StateType,Array<UserType>>(state => state.userPage.users)
 
-const Users = (
-    {currentPage, onPageChanged, totalUsersCount, pageSize, users, ...props}: UsersPropsType
-) => {
+
     return (
-        <div>
-            <Paginator
-                currentPage={currentPage}
-                onPageChanged={onPageChanged}
-                totalUsersCount={totalUsersCount}
-                pageSize={pageSize}
-            />
-
-            {
-                users.map(u =>
-                    <User
-                        key={u.id}
-                        user={u}
-                        followingInProgress={props.followingInProgress}
-                        unfollow={props.unfollow}
-                        follow={props.follow}
-                    />
-                )
-            }
-        </div>
+        <>
+          <PaginationComponent friendsMode={props.friendsMode}/>
+            <div className={s.Content}>
+                {users.map(us => <User
+                    user={us}
+                    key={us.id}/>)}
+            </div>
+        </>
     );
-};
+}
 
-export default Users;
+
+{/*<div className={s.pages}>*/
+}
+{/*    {newTotalCountPagesArray.map(page =>*/
+}
+{/*        <div key={page} className={page === props.currentPage ? s.activePage : s.page}*/
+}
+{/*             onClick={() => props?.setPageThunkCreator(props.pageSizeUsers,page)}>{page}</div>)}*/
+}
+{/*</div>*/
+}
+
+
+// const onShowSizeChangeHandler = (current: number, pageSize: number) => {
+//     debugger
+//     props.setPageThunkCreator(pageSize, current)
+// }
+
+// let totalCountPages = Math.ceil(props.totalCountPages / props.pageSizeUsers)
+// let totalCountPagesArray = []
+// for (let i = 1; i <= totalCountPages; i++) {
+//     totalCountPagesArray.push(i)
+// }
+// let newTotalCountPagesArray = totalCountPagesArray
