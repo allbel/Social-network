@@ -56,7 +56,7 @@ const LoginForm: React.FC<InjectedFormProps<FormDataType, LoginReduxFormPropsTyp
                   </div>}
                 {error && <div className={'formSummaryError'}>{error}</div>}
                 <div>
-                    <button>Login</button>
+                    <button style={{cursor: 'pointer'}}>Login</button>
                 </div>
             </form>
         );

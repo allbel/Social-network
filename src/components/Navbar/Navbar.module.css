@@ -5,8 +5,12 @@
 }
 
 .item a {
-    color: #000;
+    color: #5867dc;
     text-decoration: none;
+}
+
+.item a:hover {
+    text-decoration: underline;
 }
 
 .item a.active {

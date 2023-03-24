@@ -1,6 +1,10 @@
 .header {
     grid-area: header;
     background-color: #B3E0FF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
 }
 
 .header img {
@@ -12,5 +16,11 @@
 }
 
 .loginBlock a {
-    color: white;
+    color: #5867dc;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.loginBlock a:hover {
+    text-decoration: underline;
 }
